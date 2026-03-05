@@ -1,7 +1,7 @@
 import { useEffect } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
-import { clientService, contextService, advisorService } from '../services/clientService';
-import { useClientContext } from '../context/ClientContext';
+import { contextService } from '../services/clientService';
+import { useClientContext, useResolveContext } from '../context/ClientContext';
 
 /**
  * DeeplinkPage — resolves an opaque contextId to a ContextResolution.
@@ -14,7 +14,8 @@ import { useClientContext } from '../context/ClientContext';
 export function DeeplinkPage() {
     const { contextId } = useParams<{ contextId: string }>();
     const navigate = useNavigate();
-    const { client, setClient, setAdvisor, setLoading, setError, isLoading, error } = useClientContext();
+    const { client, isLoading, error, setError, setLoading } = useClientContext();
+    const { resolveContext } = useResolveContext();
 
     useEffect(() => {
         if (!contextId) {
@@ -22,55 +23,47 @@ export function DeeplinkPage() {
             return;
         }
 
-        // If we already resolved this context (back navigation), skip
         if (client) return;
 
-        let cancelled = false;
+        let active = true;
+
         setLoading(true);
 
-        contextService
-            .resolveContext(contextId)
-            .then(async (resolution) => {
-                if (cancelled) return;
-                if (!resolution) {
-                    setError('Invalid or expired context. Please use a fresh link.');
-                    return;
-                }
+        contextService.resolveContext(contextId).then(async (resolution) => {
+            if (!active) return;
 
-                const { advisorId, clientId } = resolution;
+            if (!resolution) {
+                setError('Invalid or expired context. Please use a fresh link.');
+                setLoading(false);
+                return;
+            }
 
-                // Resolve advisor if present
-                if (advisorId) {
-                    const advisor = await advisorService.getAdvisorById(advisorId);
-                    if (!cancelled && advisor) setAdvisor(advisor);
-                }
+            const { advisorId, clientId } = resolution;
 
+            // Use the shared hook to load auth, advisor, and client profiles
+            const result = await resolveContext(clientId, advisorId);
+
+            if (!active) {
+                if (result && typeof result !== 'boolean' && result.cancel) result.cancel();
+                return;
+            }
+
+            if (result && typeof result !== 'boolean' && result.isSuccess) {
                 if (clientId) {
-                    // We have a client → load and go straight to detail
-                    const profile = await clientService.getClientById(clientId);
-                    if (cancelled) return;
-                    if (profile) {
-                        setClient(profile);
-                        navigate('/client', { replace: true });
-                    } else {
-                        setError(`Client not found in context. Please contact support.`);
-                    }
+                    navigate('/client', { replace: true });
                 } else if (advisorId) {
-                    // Advisor only → go to search (now scoped to that advisor)
                     navigate('/', { replace: true });
-                } else {
-                    setError('Context contained no usable client or advisor reference.');
                 }
-            })
-            .catch(() => {
-                if (!cancelled) setError('Failed to resolve context. Please try again.');
-            })
-            .finally(() => {
-                if (!cancelled) setLoading(false);
-            });
+            }
+        }).catch(() => {
+            if (active) {
+                setError('Failed to resolve context. Please try again.');
+                setLoading(false);
+            }
+        });
 
-        return () => { cancelled = true; };
-    }, [contextId]); // eslint-disable-line react-hooks/exhaustive-deps
+        return () => { active = false; };
+    }, [contextId, resolveContext]); // eslint-disable-line react-hooks/exhaustive-deps
 
     if (isLoading) {
         return (

@@ -6,6 +6,7 @@ import type {
     UserRole,
     AdvisorProfile,
 } from '../types/client.types';
+import { signOnService, advisorService, clientService } from '../services/clientService';
 
 // ─── State ────────────────────────────────────────────────────────────────────
 interface ClientContextState {
@@ -140,4 +141,67 @@ export function useClientContext(): ClientContextValue {
     const ctx = useContext(ClientContext);
     if (!ctx) throw new Error('useClientContext must be used within a <ClientProvider>');
     return ctx;
+}
+
+// ─── Shared Resolver Hook ─────────────────────────────────────────────────────
+
+/**
+ * Common hook to resolve the authentication session and target client/advisor context.
+ * Useful for both Deeplinks and Module Federation entry points.
+ * 
+ * Note: Must be called INSIDE a ClientProvider.
+ */
+export function useResolveContext() {
+    const { setRole, setAdvisor, setClient, setLoading, setError } = useClientContext();
+
+    const resolveContext = useCallback(async (clientId?: string, oboAdvisorId?: string) => {
+        let isSuccess = false;
+        let cancelled = false;
+        setLoading(true);
+
+        try {
+            // 1. Resolve Auth Session
+            const signOn = await signOnService.getSignOn();
+            if (cancelled) return false;
+            setRole(signOn.role as UserRole, signOn.userId, signOn.displayName);
+
+            // 2. Resolve target OBO Advisor if present
+            if (oboAdvisorId) {
+                const advisor = await advisorService.getAdvisorById(oboAdvisorId);
+                if (!cancelled && advisor) {
+                    setAdvisor(advisor);
+                }
+            }
+
+            // 3. Resolve target Client if present
+            if (clientId) {
+                const profile = await clientService.getClientById(clientId);
+                if (cancelled) return false;
+
+                if (profile) {
+                    setClient(profile);
+                    isSuccess = true;
+                } else {
+                    setError('Client not found.');
+                }
+            } else {
+                // If only advisor was provided, it's a success
+                isSuccess = true;
+            }
+
+        } catch (err) {
+            if (!cancelled) {
+                setError('Failed to initialize context.');
+                console.error(err);
+            }
+        } finally {
+            if (!cancelled) {
+                setLoading(false);
+            }
+        }
+
+        return { isSuccess, cancel: () => { cancelled = true; } };
+    }, [setRole, setAdvisor, setClient, setLoading, setError]);
+
+    return { resolveContext };
 }
