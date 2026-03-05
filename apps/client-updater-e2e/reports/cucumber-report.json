@@ -1,0 +1,1738 @@
+[
+  {
+    "description": "  As an external system linking to the app with a client context\n  I want the app to resolve the context ID to a client profile\n  So that the user sees the client detail directly without searching",
+    "elements": [
+      {
+        "description": "",
+        "id": "deeplink-entry---load-client-via-context-id;deeplink-with-a-valid-context-id-loads-the-client",
+        "keyword": "Scenario",
+        "line": 6,
+        "name": "Deeplink with a valid context ID loads the client",
+        "steps": [
+          {
+            "keyword": "Before",
+            "hidden": true,
+            "result": {
+              "status": "passed",
+              "duration": 798305333
+            }
+          },
+          {
+            "arguments": [],
+            "keyword": "Given ",
+            "line": 7,
+            "name": "I open the deeplink URL \"/update/ctx-abc123\"",
+            "match": {
+              "location": "apps/client-updater-e2e/src/steps/client-updater.steps.ts:32"
+            },
+            "result": {
+              "status": "passed",
+              "duration": 1070630249
+            }
+          },
+          {
+            "arguments": [],
+            "keyword": "Then ",
+            "line": 8,
+            "name": "I should see a loading indicator",
+            "match": {
+              "location": "apps/client-updater-e2e/src/steps/client-updater.steps.ts:154"
+            },
+            "result": {
+              "status": "passed",
+              "duration": 436847166
+            }
+          },
+          {
+            "arguments": [],
+            "keyword": "And ",
+            "line": 9,
+            "name": "the client profile should load automatically",
+            "match": {
+              "location": "apps/client-updater-e2e/src/steps/client-updater.steps.ts:160"
+            },
+            "result": {
+              "status": "passed",
+              "duration": 36019041
+            }
+          },
+          {
+            "arguments": [],
+            "keyword": "And ",
+            "line": 10,
+            "name": "I should be redirected to \"/client\" with no client ID in the URL",
+            "match": {
+              "location": "apps/client-updater-e2e/src/steps/client-updater.steps.ts:69"
+            },
+            "result": {
+              "status": "passed",
+              "duration": 922124
+            }
+          },
+          {
+            "arguments": [],
+            "keyword": "And ",
+            "line": 11,
+            "name": "I should see a client named \"Alice Johnson\"",
+            "match": {
+              "location": "apps/client-updater-e2e/src/steps/client-updater.steps.ts:130"
+            },
+            "result": {
+              "status": "passed",
+              "duration": 2079625
+            }
+          },
+          {
+            "arguments": [],
+            "keyword": "And ",
+            "line": 12,
+            "name": "I should see all 5 client attributes",
+            "match": {
+              "location": "apps/client-updater-e2e/src/steps/client-updater.steps.ts:135"
+            },
+            "result": {
+              "status": "passed",
+              "duration": 8618749
+            }
+          },
+          {
+            "keyword": "After",
+            "hidden": true,
+            "result": {
+              "status": "passed",
+              "duration": 20265542
+            }
+          }
+        ],
+        "tags": [],
+        "type": "scenario"
+      },
+      {
+        "description": "",
+        "id": "deeplink-entry---load-client-via-context-id;deeplink-then-edit-an-attribute",
+        "keyword": "Scenario",
+        "line": 14,
+        "name": "Deeplink then edit an attribute",
+        "steps": [
+          {
+            "keyword": "Before",
+            "hidden": true,
+            "result": {
+              "status": "passed",
+              "duration": 102055624
+            }
+          },
+          {
+            "arguments": [],
+            "keyword": "Given ",
+            "line": 15,
+            "name": "I open the deeplink URL \"/update/ctx-abc123\"",
+            "match": {
+              "location": "apps/client-updater-e2e/src/steps/client-updater.steps.ts:32"
+            },
+            "result": {
+              "status": "passed",
+              "duration": 853625375
+            }
+          },
+          {
+            "arguments": [],
+            "keyword": "And ",
+            "line": 16,
+            "name": "the client profile is loaded",
+            "match": {
+              "location": "apps/client-updater-e2e/src/steps/client-updater.steps.ts:166"
+            },
+            "result": {
+              "status": "passed",
+              "duration": 446308791
+            }
+          },
+          {
+            "arguments": [],
+            "keyword": "When ",
+            "line": 17,
+            "name": "I click \"Edit\" next to \"Phone Number\"",
+            "match": {
+              "location": "apps/client-updater-e2e/src/steps/client-updater.steps.ts:142"
+            },
+            "result": {
+              "status": "passed",
+              "duration": 87077792
+            }
+          },
+          {
+            "arguments": [],
+            "keyword": "Then ",
+            "line": 18,
+            "name": "I should be on Step 1 of the wizard",
+            "match": {
+              "location": "apps/client-updater-e2e/src/steps/client-updater.steps.ts:54"
+            },
+            "result": {
+              "status": "passed",
+              "duration": 2484000
+            }
+          },
+          {
+            "arguments": [],
+            "keyword": "And ",
+            "line": 19,
+            "name": "the URL should be \"/client/edit/phone\"",
+            "match": {
+              "location": "apps/client-updater-e2e/src/steps/client-updater.steps.ts:65"
+            },
+            "result": {
+              "status": "passed",
+              "duration": 938499
+            }
+          },
+          {
+            "arguments": [],
+            "keyword": "When ",
+            "line": 20,
+            "name": "I enter \"+1 (555) 999-0000\" as the new value",
+            "match": {
+              "location": "apps/client-updater-e2e/src/steps/client-updater.steps.ts:173"
+            },
+            "result": {
+              "status": "passed",
+              "duration": 5557250
+            }
+          },
+          {
+            "arguments": [],
+            "keyword": "And ",
+            "line": 21,
+            "name": "I click \"Review Changes\"",
+            "match": {
+              "location": "apps/client-updater-e2e/src/steps/client-updater.steps.ts:178"
+            },
+            "result": {
+              "status": "passed",
+              "duration": 14644124
+            }
+          },
+          {
+            "arguments": [],
+            "keyword": "Then ",
+            "line": 22,
+            "name": "I should be on Step 2 of the wizard at URL \"/client/verify\"",
+            "match": {
+              "location": "apps/client-updater-e2e/src/steps/client-updater.steps.ts:61"
+            },
+            "result": {
+              "status": "passed",
+              "duration": 948832
+            }
+          },
+          {
+            "arguments": [],
+            "keyword": "When ",
+            "line": 23,
+            "name": "I click \"Confirm & Save\"",
+            "match": {
+              "location": "apps/client-updater-e2e/src/steps/client-updater.steps.ts:178"
+            },
+            "result": {
+              "status": "passed",
+              "duration": 20834915
+            }
+          },
+          {
+            "arguments": [],
+            "keyword": "Then ",
+            "line": 24,
+            "name": "I should be on Step 3 of the wizard at URL \"/client/confirmation\"",
+            "match": {
+              "location": "apps/client-updater-e2e/src/steps/client-updater.steps.ts:61"
+            },
+            "result": {
+              "status": "passed",
+              "duration": 856624583
+            }
+          },
+          {
+            "arguments": [],
+            "keyword": "And ",
+            "line": 25,
+            "name": "I should see a success message",
+            "match": {
+              "location": "apps/client-updater-e2e/src/steps/client-updater.steps.ts:191"
+            },
+            "result": {
+              "status": "passed",
+              "duration": 5264541
+            }
+          },
+          {
+            "keyword": "After",
+            "hidden": true,
+            "result": {
+              "status": "passed",
+              "duration": 29769833
+            }
+          }
+        ],
+        "tags": [],
+        "type": "scenario"
+      },
+      {
+        "description": "",
+        "id": "deeplink-entry---load-client-via-context-id;deeplink-with-an-invalid-context-id-shows-an-error",
+        "keyword": "Scenario",
+        "line": 27,
+        "name": "Deeplink with an invalid context ID shows an error",
+        "steps": [
+          {
+            "keyword": "Before",
+            "hidden": true,
+            "result": {
+              "status": "passed",
+              "duration": 109860125
+            }
+          },
+          {
+            "arguments": [],
+            "keyword": "Given ",
+            "line": 28,
+            "name": "I open the deeplink URL \"/update/ctx-invalid-xyz\"",
+            "match": {
+              "location": "apps/client-updater-e2e/src/steps/client-updater.steps.ts:32"
+            },
+            "result": {
+              "status": "passed",
+              "duration": 886791041
+            }
+          },
+          {
+            "arguments": [],
+            "keyword": "Then ",
+            "line": 29,
+            "name": "I should see an error message about invalid or expired context",
+            "match": {
+              "location": "apps/client-updater-e2e/src/steps/client-updater.steps.ts:203"
+            },
+            "result": {
+              "status": "passed",
+              "duration": 22444750
+            }
+          },
+          {
+            "arguments": [],
+            "keyword": "And ",
+            "line": 30,
+            "name": "I should see a \"Back to Search\" link",
+            "match": {
+              "location": "apps/client-updater-e2e/src/steps/client-updater.steps.ts:209"
+            },
+            "result": {
+              "status": "passed",
+              "duration": 2165750
+            }
+          },
+          {
+            "keyword": "After",
+            "hidden": true,
+            "result": {
+              "status": "passed",
+              "duration": 18108208
+            }
+          }
+        ],
+        "tags": [],
+        "type": "scenario"
+      },
+      {
+        "description": "",
+        "id": "deeplink-entry---load-client-via-context-id;no-client-id-appears-in-any-url-during-deeplink-flow",
+        "keyword": "Scenario",
+        "line": 32,
+        "name": "No client ID appears in any URL during deeplink flow",
+        "steps": [
+          {
+            "keyword": "Before",
+            "hidden": true,
+            "result": {
+              "status": "passed",
+              "duration": 107832416
+            }
+          },
+          {
+            "arguments": [],
+            "keyword": "Given ",
+            "line": 33,
+            "name": "I open the deeplink URL \"/update/ctx-def456\"",
+            "match": {
+              "location": "apps/client-updater-e2e/src/steps/client-updater.steps.ts:32"
+            },
+            "result": {
+              "status": "passed",
+              "duration": 847100082
+            }
+          },
+          {
+            "arguments": [],
+            "keyword": "And ",
+            "line": 34,
+            "name": "the client profile is loaded",
+            "match": {
+              "location": "apps/client-updater-e2e/src/steps/client-updater.steps.ts:166"
+            },
+            "result": {
+              "status": "passed",
+              "duration": 454242749
+            }
+          },
+          {
+            "arguments": [],
+            "keyword": "Then ",
+            "line": 35,
+            "name": "the URL should not contain \"2\"",
+            "match": {
+              "location": "apps/client-updater-e2e/src/steps/client-updater.steps.ts:45"
+            },
+            "result": {
+              "status": "passed",
+              "duration": 1156124
+            }
+          },
+          {
+            "arguments": [],
+            "keyword": "When ",
+            "line": 36,
+            "name": "I click \"Edit\" next to \"Full Name\"",
+            "match": {
+              "location": "apps/client-updater-e2e/src/steps/client-updater.steps.ts:142"
+            },
+            "result": {
+              "status": "passed",
+              "duration": 62982457
+            }
+          },
+          {
+            "arguments": [],
+            "keyword": "Then ",
+            "line": 37,
+            "name": "the URL should not contain \"2\"",
+            "match": {
+              "location": "apps/client-updater-e2e/src/steps/client-updater.steps.ts:45"
+            },
+            "result": {
+              "status": "passed",
+              "duration": 143458
+            }
+          },
+          {
+            "arguments": [],
+            "keyword": "When ",
+            "line": 38,
+            "name": "I enter \"Bob W. Williams\" as the new value",
+            "match": {
+              "location": "apps/client-updater-e2e/src/steps/client-updater.steps.ts:173"
+            },
+            "result": {
+              "status": "passed",
+              "duration": 11497374
+            }
+          },
+          {
+            "arguments": [],
+            "keyword": "And ",
+            "line": 39,
+            "name": "I click \"Review Changes\"",
+            "match": {
+              "location": "apps/client-updater-e2e/src/steps/client-updater.steps.ts:178"
+            },
+            "result": {
+              "status": "passed",
+              "duration": 18449457
+            }
+          },
+          {
+            "arguments": [],
+            "keyword": "Then ",
+            "line": 40,
+            "name": "the URL should not contain \"2\"",
+            "match": {
+              "location": "apps/client-updater-e2e/src/steps/client-updater.steps.ts:45"
+            },
+            "result": {
+              "status": "passed",
+              "duration": 174458
+            }
+          },
+          {
+            "arguments": [],
+            "keyword": "When ",
+            "line": 41,
+            "name": "I click \"Confirm & Save\"",
+            "match": {
+              "location": "apps/client-updater-e2e/src/steps/client-updater.steps.ts:178"
+            },
+            "result": {
+              "status": "passed",
+              "duration": 21702250
+            }
+          },
+          {
+            "arguments": [],
+            "keyword": "Then ",
+            "line": 42,
+            "name": "the URL should not contain \"2\"",
+            "match": {
+              "location": "apps/client-updater-e2e/src/steps/client-updater.steps.ts:45"
+            },
+            "result": {
+              "status": "passed",
+              "duration": 149499
+            }
+          },
+          {
+            "keyword": "After",
+            "hidden": true,
+            "result": {
+              "status": "passed",
+              "duration": 14447041
+            }
+          }
+        ],
+        "tags": [],
+        "type": "scenario"
+      }
+    ],
+    "id": "deeplink-entry---load-client-via-context-id",
+    "line": 1,
+    "keyword": "Feature",
+    "name": "Deeplink Entry - Load Client via Context ID",
+    "tags": [],
+    "uri": "apps/client-updater-e2e/features/deeplink-entry.feature"
+  },
+  {
+    "description": "  As an authorised user accessing the app directly\n  I want to search for a client and update one of their attributes\n  So that I can keep client data accurate without exposing PII in URLs",
+    "elements": [
+      {
+        "description": "",
+        "id": "direct-entry---search-and-update-client-attribute;search-for-a-client-and-view-their-details",
+        "keyword": "Scenario",
+        "line": 10,
+        "name": "Search for a client and view their details",
+        "steps": [
+          {
+            "keyword": "Before",
+            "hidden": true,
+            "result": {
+              "status": "passed",
+              "duration": 100415333
+            }
+          },
+          {
+            "arguments": [],
+            "keyword": "Given ",
+            "line": 7,
+            "name": "the app is open at the home page",
+            "match": {
+              "location": "apps/client-updater-e2e/src/steps/client-updater.steps.ts:21"
+            },
+            "result": {
+              "status": "passed",
+              "duration": 802403582
+            }
+          },
+          {
+            "arguments": [],
+            "keyword": "And ",
+            "line": 8,
+            "name": "the URL should not contain any client ID",
+            "match": {
+              "location": "apps/client-updater-e2e/src/steps/client-updater.steps.ts:39"
+            },
+            "result": {
+              "status": "passed",
+              "duration": 521709
+            }
+          },
+          {
+            "arguments": [],
+            "keyword": "When ",
+            "line": 11,
+            "name": "I search for \"Alice\"",
+            "match": {
+              "location": "apps/client-updater-e2e/src/steps/client-updater.steps.ts:78"
+            },
+            "result": {
+              "status": "passed",
+              "duration": 68908250
+            }
+          },
+          {
+            "arguments": [],
+            "keyword": "Then ",
+            "line": 12,
+            "name": "I should see a search result for \"Alice Johnson\"",
+            "match": {
+              "location": "apps/client-updater-e2e/src/steps/client-updater.steps.ts:98"
+            },
+            "result": {
+              "status": "passed",
+              "duration": 2580459
+            }
+          },
+          {
+            "arguments": [],
+            "keyword": "When ",
+            "line": 13,
+            "name": "I select \"Alice Johnson\" from the results",
+            "match": {
+              "location": "apps/client-updater-e2e/src/steps/client-updater.steps.ts:108"
+            },
+            "result": {
+              "status": "passed",
+              "duration": 33650375
+            }
+          },
+          {
+            "arguments": [],
+            "keyword": "Then ",
+            "line": 14,
+            "name": "I should be on the client detail page at URL \"/client\"",
+            "match": {
+              "location": "apps/client-updater-e2e/src/steps/client-updater.steps.ts:50"
+            },
+            "result": {
+              "status": "passed",
+              "duration": 1856708
+            }
+          },
+          {
+            "arguments": [],
+            "keyword": "And ",
+            "line": 15,
+            "name": "I should see all 5 client attributes",
+            "match": {
+              "location": "apps/client-updater-e2e/src/steps/client-updater.steps.ts:135"
+            },
+            "result": {
+              "status": "passed",
+              "duration": 5088332
+            }
+          },
+          {
+            "keyword": "After",
+            "hidden": true,
+            "result": {
+              "status": "passed",
+              "duration": 16198333
+            }
+          }
+        ],
+        "tags": [],
+        "type": "scenario"
+      },
+      {
+        "description": "",
+        "id": "direct-entry---search-and-update-client-attribute;edit-a-client's-email-address-through-the-full-wizard",
+        "keyword": "Scenario",
+        "line": 17,
+        "name": "Edit a client's email address through the full wizard",
+        "steps": [
+          {
+            "keyword": "Before",
+            "hidden": true,
+            "result": {
+              "status": "passed",
+              "duration": 98790375
+            }
+          },
+          {
+            "arguments": [],
+            "keyword": "Given ",
+            "line": 7,
+            "name": "the app is open at the home page",
+            "match": {
+              "location": "apps/client-updater-e2e/src/steps/client-updater.steps.ts:21"
+            },
+            "result": {
+              "status": "passed",
+              "duration": 790213667
+            }
+          },
+          {
+            "arguments": [],
+            "keyword": "And ",
+            "line": 8,
+            "name": "the URL should not contain any client ID",
+            "match": {
+              "location": "apps/client-updater-e2e/src/steps/client-updater.steps.ts:39"
+            },
+            "result": {
+              "status": "passed",
+              "duration": 1786374
+            }
+          },
+          {
+            "arguments": [],
+            "keyword": "When ",
+            "line": 18,
+            "name": "I search for \"Alice\"",
+            "match": {
+              "location": "apps/client-updater-e2e/src/steps/client-updater.steps.ts:78"
+            },
+            "result": {
+              "status": "passed",
+              "duration": 69570208
+            }
+          },
+          {
+            "arguments": [],
+            "keyword": "And ",
+            "line": 19,
+            "name": "I select \"Alice Johnson\" from the results",
+            "match": {
+              "location": "apps/client-updater-e2e/src/steps/client-updater.steps.ts:108"
+            },
+            "result": {
+              "status": "passed",
+              "duration": 25400582
+            }
+          },
+          {
+            "arguments": [],
+            "keyword": "And ",
+            "line": 20,
+            "name": "I click \"Edit\" next to \"Email Address\"",
+            "match": {
+              "location": "apps/client-updater-e2e/src/steps/client-updater.steps.ts:142"
+            },
+            "result": {
+              "status": "passed",
+              "duration": 16665290
+            }
+          },
+          {
+            "arguments": [],
+            "keyword": "Then ",
+            "line": 21,
+            "name": "I should be on Step 1 of the wizard",
+            "match": {
+              "location": "apps/client-updater-e2e/src/steps/client-updater.steps.ts:54"
+            },
+            "result": {
+              "status": "passed",
+              "duration": 3465500
+            }
+          },
+          {
+            "arguments": [],
+            "keyword": "And ",
+            "line": 22,
+            "name": "the URL should be \"/client/edit/email\"",
+            "match": {
+              "location": "apps/client-updater-e2e/src/steps/client-updater.steps.ts:65"
+            },
+            "result": {
+              "status": "passed",
+              "duration": 859166
+            }
+          },
+          {
+            "arguments": [],
+            "keyword": "When ",
+            "line": 23,
+            "name": "I enter \"alice.updated@example.com\" as the new value",
+            "match": {
+              "location": "apps/client-updater-e2e/src/steps/client-updater.steps.ts:173"
+            },
+            "result": {
+              "status": "passed",
+              "duration": 4655000
+            }
+          },
+          {
+            "arguments": [],
+            "keyword": "And ",
+            "line": 24,
+            "name": "I click \"Review Changes\"",
+            "match": {
+              "location": "apps/client-updater-e2e/src/steps/client-updater.steps.ts:178"
+            },
+            "result": {
+              "status": "passed",
+              "duration": 25049625
+            }
+          },
+          {
+            "arguments": [],
+            "keyword": "Then ",
+            "line": 25,
+            "name": "I should be on Step 2 of the wizard at URL \"/client/verify\"",
+            "match": {
+              "location": "apps/client-updater-e2e/src/steps/client-updater.steps.ts:61"
+            },
+            "result": {
+              "status": "passed",
+              "duration": 931915
+            }
+          },
+          {
+            "arguments": [],
+            "keyword": "And ",
+            "line": 26,
+            "name": "I should see the current value \"alice.johnson@example.com\"",
+            "match": {
+              "location": "apps/client-updater-e2e/src/steps/client-updater.steps.ts:183"
+            },
+            "result": {
+              "status": "passed",
+              "duration": 1535916
+            }
+          },
+          {
+            "arguments": [],
+            "keyword": "And ",
+            "line": 27,
+            "name": "I should see the new value \"alice.updated@example.com\"",
+            "match": {
+              "location": "apps/client-updater-e2e/src/steps/client-updater.steps.ts:187"
+            },
+            "result": {
+              "status": "passed",
+              "duration": 988499
+            }
+          },
+          {
+            "arguments": [],
+            "keyword": "When ",
+            "line": 28,
+            "name": "I click \"Confirm & Save\"",
+            "match": {
+              "location": "apps/client-updater-e2e/src/steps/client-updater.steps.ts:178"
+            },
+            "result": {
+              "status": "passed",
+              "duration": 21859624
+            }
+          },
+          {
+            "arguments": [],
+            "keyword": "Then ",
+            "line": 29,
+            "name": "I should be on Step 3 of the wizard at URL \"/client/confirmation\"",
+            "match": {
+              "location": "apps/client-updater-e2e/src/steps/client-updater.steps.ts:61"
+            },
+            "result": {
+              "status": "passed",
+              "duration": 1691375
+            }
+          },
+          {
+            "arguments": [],
+            "keyword": "And ",
+            "line": 30,
+            "name": "I should see a success message",
+            "match": {
+              "location": "apps/client-updater-e2e/src/steps/client-updater.steps.ts:191"
+            },
+            "result": {
+              "status": "passed",
+              "duration": 1122665
+            }
+          },
+          {
+            "keyword": "After",
+            "hidden": true,
+            "result": {
+              "status": "passed",
+              "duration": 15843333
+            }
+          }
+        ],
+        "tags": [],
+        "type": "scenario"
+      },
+      {
+        "description": "",
+        "id": "direct-entry---search-and-update-client-attribute;edit-a-client's-full-name",
+        "keyword": "Scenario",
+        "line": 32,
+        "name": "Edit a client's full name",
+        "steps": [
+          {
+            "keyword": "Before",
+            "hidden": true,
+            "result": {
+              "status": "passed",
+              "duration": 101166333
+            }
+          },
+          {
+            "arguments": [],
+            "keyword": "Given ",
+            "line": 7,
+            "name": "the app is open at the home page",
+            "match": {
+              "location": "apps/client-updater-e2e/src/steps/client-updater.steps.ts:21"
+            },
+            "result": {
+              "status": "passed",
+              "duration": 799930416
+            }
+          },
+          {
+            "arguments": [],
+            "keyword": "And ",
+            "line": 8,
+            "name": "the URL should not contain any client ID",
+            "match": {
+              "location": "apps/client-updater-e2e/src/steps/client-updater.steps.ts:39"
+            },
+            "result": {
+              "status": "passed",
+              "duration": 689167
+            }
+          },
+          {
+            "arguments": [],
+            "keyword": "When ",
+            "line": 33,
+            "name": "I search for \"Alice\"",
+            "match": {
+              "location": "apps/client-updater-e2e/src/steps/client-updater.steps.ts:78"
+            },
+            "result": {
+              "status": "passed",
+              "duration": 70967791
+            }
+          },
+          {
+            "arguments": [],
+            "keyword": "And ",
+            "line": 34,
+            "name": "I select \"Alice Johnson\" from the results",
+            "match": {
+              "location": "apps/client-updater-e2e/src/steps/client-updater.steps.ts:108"
+            },
+            "result": {
+              "status": "passed",
+              "duration": 32159417
+            }
+          },
+          {
+            "arguments": [],
+            "keyword": "And ",
+            "line": 35,
+            "name": "I click \"Edit\" next to \"Full Name\"",
+            "match": {
+              "location": "apps/client-updater-e2e/src/steps/client-updater.steps.ts:142"
+            },
+            "result": {
+              "status": "passed",
+              "duration": 24207707
+            }
+          },
+          {
+            "arguments": [],
+            "keyword": "Then ",
+            "line": 36,
+            "name": "I should be on Step 1 of the wizard",
+            "match": {
+              "location": "apps/client-updater-e2e/src/steps/client-updater.steps.ts:54"
+            },
+            "result": {
+              "status": "passed",
+              "duration": 2668250
+            }
+          },
+          {
+            "arguments": [],
+            "keyword": "When ",
+            "line": 37,
+            "name": "I enter \"Alice M. Johnson\" as the new value",
+            "match": {
+              "location": "apps/client-updater-e2e/src/steps/client-updater.steps.ts:173"
+            },
+            "result": {
+              "status": "passed",
+              "duration": 3035584
+            }
+          },
+          {
+            "arguments": [],
+            "keyword": "And ",
+            "line": 38,
+            "name": "I click \"Review Changes\"",
+            "match": {
+              "location": "apps/client-updater-e2e/src/steps/client-updater.steps.ts:178"
+            },
+            "result": {
+              "status": "passed",
+              "duration": 14922833
+            }
+          },
+          {
+            "arguments": [],
+            "keyword": "Then ",
+            "line": 39,
+            "name": "I should be on Step 2 of the wizard at URL \"/client/verify\"",
+            "match": {
+              "location": "apps/client-updater-e2e/src/steps/client-updater.steps.ts:61"
+            },
+            "result": {
+              "status": "passed",
+              "duration": 1398541
+            }
+          },
+          {
+            "arguments": [],
+            "keyword": "When ",
+            "line": 40,
+            "name": "I click \"Confirm & Save\"",
+            "match": {
+              "location": "apps/client-updater-e2e/src/steps/client-updater.steps.ts:178"
+            },
+            "result": {
+              "status": "passed",
+              "duration": 23275333
+            }
+          },
+          {
+            "arguments": [],
+            "keyword": "Then ",
+            "line": 41,
+            "name": "I should see a success message",
+            "match": {
+              "location": "apps/client-updater-e2e/src/steps/client-updater.steps.ts:191"
+            },
+            "result": {
+              "status": "passed",
+              "duration": 1132999
+            }
+          },
+          {
+            "keyword": "After",
+            "hidden": true,
+            "result": {
+              "status": "passed",
+              "duration": 15852082
+            }
+          }
+        ],
+        "tags": [],
+        "type": "scenario"
+      },
+      {
+        "description": "",
+        "id": "direct-entry---search-and-update-client-attribute;cancel-an-edit-and-return-to-client-detail",
+        "keyword": "Scenario",
+        "line": 43,
+        "name": "Cancel an edit and return to client detail",
+        "steps": [
+          {
+            "keyword": "Before",
+            "hidden": true,
+            "result": {
+              "status": "passed",
+              "duration": 100009667
+            }
+          },
+          {
+            "arguments": [],
+            "keyword": "Given ",
+            "line": 7,
+            "name": "the app is open at the home page",
+            "match": {
+              "location": "apps/client-updater-e2e/src/steps/client-updater.steps.ts:21"
+            },
+            "result": {
+              "status": "passed",
+              "duration": 853714915
+            }
+          },
+          {
+            "arguments": [],
+            "keyword": "And ",
+            "line": 8,
+            "name": "the URL should not contain any client ID",
+            "match": {
+              "location": "apps/client-updater-e2e/src/steps/client-updater.steps.ts:39"
+            },
+            "result": {
+              "status": "passed",
+              "duration": 949000
+            }
+          },
+          {
+            "arguments": [],
+            "keyword": "When ",
+            "line": 44,
+            "name": "I search for \"Alice\"",
+            "match": {
+              "location": "apps/client-updater-e2e/src/steps/client-updater.steps.ts:78"
+            },
+            "result": {
+              "status": "passed",
+              "duration": 50692457
+            }
+          },
+          {
+            "arguments": [],
+            "keyword": "And ",
+            "line": 45,
+            "name": "I select \"Alice Johnson\" from the results",
+            "match": {
+              "location": "apps/client-updater-e2e/src/steps/client-updater.steps.ts:108"
+            },
+            "result": {
+              "status": "passed",
+              "duration": 48707209
+            }
+          },
+          {
+            "arguments": [],
+            "keyword": "And ",
+            "line": 46,
+            "name": "I click \"Edit\" next to \"Phone Number\"",
+            "match": {
+              "location": "apps/client-updater-e2e/src/steps/client-updater.steps.ts:142"
+            },
+            "result": {
+              "status": "passed",
+              "duration": 24054833
+            }
+          },
+          {
+            "arguments": [],
+            "keyword": "Then ",
+            "line": 47,
+            "name": "I should be on Step 1 of the wizard",
+            "match": {
+              "location": "apps/client-updater-e2e/src/steps/client-updater.steps.ts:54"
+            },
+            "result": {
+              "status": "passed",
+              "duration": 2438583
+            }
+          },
+          {
+            "arguments": [],
+            "keyword": "When ",
+            "line": 48,
+            "name": "I click \"Cancel\"",
+            "match": {
+              "location": "apps/client-updater-e2e/src/steps/client-updater.steps.ts:178"
+            },
+            "result": {
+              "status": "passed",
+              "duration": 22133875
+            }
+          },
+          {
+            "arguments": [],
+            "keyword": "Then ",
+            "line": 49,
+            "name": "I should be on the client detail page at URL \"/client\"",
+            "match": {
+              "location": "apps/client-updater-e2e/src/steps/client-updater.steps.ts:50"
+            },
+            "result": {
+              "status": "passed",
+              "duration": 914624
+            }
+          },
+          {
+            "keyword": "After",
+            "hidden": true,
+            "result": {
+              "status": "passed",
+              "duration": 14943042
+            }
+          }
+        ],
+        "tags": [],
+        "type": "scenario"
+      },
+      {
+        "description": "",
+        "id": "direct-entry---search-and-update-client-attribute;validation-prevents-submitting-the-same-value",
+        "keyword": "Scenario",
+        "line": 51,
+        "name": "Validation prevents submitting the same value",
+        "steps": [
+          {
+            "keyword": "Before",
+            "hidden": true,
+            "result": {
+              "status": "passed",
+              "duration": 99769500
+            }
+          },
+          {
+            "arguments": [],
+            "keyword": "Given ",
+            "line": 7,
+            "name": "the app is open at the home page",
+            "match": {
+              "location": "apps/client-updater-e2e/src/steps/client-updater.steps.ts:21"
+            },
+            "result": {
+              "status": "passed",
+              "duration": 808017292
+            }
+          },
+          {
+            "arguments": [],
+            "keyword": "And ",
+            "line": 8,
+            "name": "the URL should not contain any client ID",
+            "match": {
+              "location": "apps/client-updater-e2e/src/steps/client-updater.steps.ts:39"
+            },
+            "result": {
+              "status": "passed",
+              "duration": 872917
+            }
+          },
+          {
+            "arguments": [],
+            "keyword": "When ",
+            "line": 52,
+            "name": "I search for \"Alice\"",
+            "match": {
+              "location": "apps/client-updater-e2e/src/steps/client-updater.steps.ts:78"
+            },
+            "result": {
+              "status": "passed",
+              "duration": 45493916
+            }
+          },
+          {
+            "arguments": [],
+            "keyword": "And ",
+            "line": 53,
+            "name": "I select \"Alice Johnson\" from the results",
+            "match": {
+              "location": "apps/client-updater-e2e/src/steps/client-updater.steps.ts:108"
+            },
+            "result": {
+              "status": "passed",
+              "duration": 49449125
+            }
+          },
+          {
+            "arguments": [],
+            "keyword": "And ",
+            "line": 54,
+            "name": "I click \"Edit\" next to \"Email Address\"",
+            "match": {
+              "location": "apps/client-updater-e2e/src/steps/client-updater.steps.ts:142"
+            },
+            "result": {
+              "status": "passed",
+              "duration": 16671292
+            }
+          },
+          {
+            "arguments": [],
+            "keyword": "When ",
+            "line": 55,
+            "name": "I enter \"alice.johnson@example.com\" as the new value",
+            "match": {
+              "location": "apps/client-updater-e2e/src/steps/client-updater.steps.ts:173"
+            },
+            "result": {
+              "status": "passed",
+              "duration": 2933042
+            }
+          },
+          {
+            "arguments": [],
+            "keyword": "Then ",
+            "line": 56,
+            "name": "the \"Review Changes\" button should be disabled",
+            "match": {
+              "location": "apps/client-updater-e2e/src/steps/client-updater.steps.ts:196"
+            },
+            "result": {
+              "status": "passed",
+              "duration": 1401166
+            }
+          },
+          {
+            "keyword": "After",
+            "hidden": true,
+            "result": {
+              "status": "passed",
+              "duration": 14390541
+            }
+          }
+        ],
+        "tags": [],
+        "type": "scenario"
+      },
+      {
+        "description": "",
+        "id": "direct-entry---search-and-update-client-attribute;search-returns-no-results",
+        "keyword": "Scenario",
+        "line": 58,
+        "name": "Search returns no results",
+        "steps": [
+          {
+            "keyword": "Before",
+            "hidden": true,
+            "result": {
+              "status": "passed",
+              "duration": 100481499
+            }
+          },
+          {
+            "arguments": [],
+            "keyword": "Given ",
+            "line": 7,
+            "name": "the app is open at the home page",
+            "match": {
+              "location": "apps/client-updater-e2e/src/steps/client-updater.steps.ts:21"
+            },
+            "result": {
+              "status": "passed",
+              "duration": 848574000
+            }
+          },
+          {
+            "arguments": [],
+            "keyword": "And ",
+            "line": 8,
+            "name": "the URL should not contain any client ID",
+            "match": {
+              "location": "apps/client-updater-e2e/src/steps/client-updater.steps.ts:39"
+            },
+            "result": {
+              "status": "passed",
+              "duration": 586000
+            }
+          },
+          {
+            "arguments": [],
+            "keyword": "When ",
+            "line": 59,
+            "name": "I search for \"zzznoresults\"",
+            "match": {
+              "location": "apps/client-updater-e2e/src/steps/client-updater.steps.ts:78"
+            },
+            "result": {
+              "status": "passed",
+              "duration": 47938708
+            }
+          },
+          {
+            "arguments": [],
+            "keyword": "Then ",
+            "line": 60,
+            "name": "I should see a no-results message",
+            "match": {
+              "location": "apps/client-updater-e2e/src/steps/client-updater.steps.ts:103"
+            },
+            "result": {
+              "status": "passed",
+              "duration": 28114583
+            }
+          },
+          {
+            "keyword": "After",
+            "hidden": true,
+            "result": {
+              "status": "passed",
+              "duration": 14813749
+            }
+          }
+        ],
+        "tags": [],
+        "type": "scenario"
+      }
+    ],
+    "id": "direct-entry---search-and-update-client-attribute",
+    "line": 1,
+    "keyword": "Feature",
+    "name": "Direct Entry - Search and Update Client Attribute",
+    "tags": [],
+    "uri": "apps/client-updater-e2e/features/direct-entry.feature"
+  },
+  {
+    "description": "  As a user of the Client Updater App\n  My accessible functionality should depend on my active role",
+    "elements": [
+      {
+        "description": "",
+        "id": "role-aware-flows;advisor-can-only-see-their-own-clients",
+        "keyword": "Scenario",
+        "line": 8,
+        "name": "Advisor can only see their own clients",
+        "steps": [
+          {
+            "keyword": "Before",
+            "hidden": true,
+            "result": {
+              "status": "passed",
+              "duration": 104785833
+            }
+          },
+          {
+            "arguments": [],
+            "keyword": "Given ",
+            "line": 9,
+            "name": "I log in as an \"advisor\"",
+            "match": {
+              "location": "apps/client-updater-e2e/src/steps/client-updater.steps.ts:15"
+            },
+            "result": {
+              "status": "passed",
+              "duration": 502208
+            }
+          },
+          {
+            "arguments": [],
+            "keyword": "And ",
+            "line": 10,
+            "name": "the app is open at the home page",
+            "match": {
+              "location": "apps/client-updater-e2e/src/steps/client-updater.steps.ts:21"
+            },
+            "result": {
+              "status": "passed",
+              "duration": 935896166
+            }
+          },
+          {
+            "arguments": [],
+            "keyword": "Then ",
+            "line": 11,
+            "name": "I should see the advisor home page",
+            "match": {
+              "location": "apps/client-updater-e2e/src/steps/client-updater.steps.ts:114"
+            },
+            "result": {
+              "status": "passed",
+              "duration": 26255624
+            }
+          },
+          {
+            "arguments": [],
+            "keyword": "When ",
+            "line": 12,
+            "name": "I search for \"Alice\"",
+            "match": {
+              "location": "apps/client-updater-e2e/src/steps/client-updater.steps.ts:78"
+            },
+            "result": {
+              "status": "passed",
+              "duration": 50910874
+            }
+          },
+          {
+            "arguments": [],
+            "keyword": "Then ",
+            "line": 13,
+            "name": "I should see a search result for \"Alice Johnson\"",
+            "match": {
+              "location": "apps/client-updater-e2e/src/steps/client-updater.steps.ts:98"
+            },
+            "result": {
+              "status": "passed",
+              "duration": 1952333
+            }
+          },
+          {
+            "arguments": [],
+            "keyword": "When ",
+            "line": 14,
+            "name": "I search for \"Carol\"",
+            "match": {
+              "location": "apps/client-updater-e2e/src/steps/client-updater.steps.ts:78"
+            },
+            "result": {
+              "status": "passed",
+              "duration": 24336124
+            }
+          },
+          {
+            "arguments": [],
+            "keyword": "Then ",
+            "line": 15,
+            "name": "I should see a no-results message",
+            "match": {
+              "location": "apps/client-updater-e2e/src/steps/client-updater.steps.ts:103"
+            },
+            "result": {
+              "status": "passed",
+              "duration": 3483333
+            }
+          },
+          {
+            "keyword": "After",
+            "hidden": true,
+            "result": {
+              "status": "passed",
+              "duration": 16731541
+            }
+          }
+        ],
+        "tags": [],
+        "type": "scenario"
+      },
+      {
+        "description": "",
+        "id": "role-aware-flows;support-staff-can-act-on-behalf-of-an-advisor",
+        "keyword": "Scenario",
+        "line": 17,
+        "name": "Support staff can act on behalf of an advisor",
+        "steps": [
+          {
+            "keyword": "Before",
+            "hidden": true,
+            "result": {
+              "status": "passed",
+              "duration": 111997292
+            }
+          },
+          {
+            "arguments": [],
+            "keyword": "Given ",
+            "line": 18,
+            "name": "I log in as \"support_staff\"",
+            "match": {
+              "location": "apps/client-updater-e2e/src/steps/client-updater.steps.ts:7"
+            },
+            "result": {
+              "status": "passed",
+              "duration": 549209
+            }
+          },
+          {
+            "arguments": [],
+            "keyword": "And ",
+            "line": 19,
+            "name": "the app is open at the home page",
+            "match": {
+              "location": "apps/client-updater-e2e/src/steps/client-updater.steps.ts:21"
+            },
+            "result": {
+              "status": "passed",
+              "duration": 878441958
+            }
+          },
+          {
+            "arguments": [],
+            "keyword": "Then ",
+            "line": 20,
+            "name": "I should see the support staff home page",
+            "match": {
+              "location": "apps/client-updater-e2e/src/steps/client-updater.steps.ts:119"
+            },
+            "result": {
+              "status": "passed",
+              "duration": 22093000
+            }
+          },
+          {
+            "arguments": [],
+            "keyword": "When ",
+            "line": 21,
+            "name": "I click \"Work on Behalf of Advisor →\"",
+            "match": {
+              "location": "apps/client-updater-e2e/src/steps/client-updater.steps.ts:178"
+            },
+            "result": {
+              "status": "passed",
+              "duration": 54343499
+            }
+          },
+          {
+            "arguments": [],
+            "keyword": "Then ",
+            "line": 22,
+            "name": "I should be redirected to \"/select-advisor\" with no client ID in the URL",
+            "match": {
+              "location": "apps/client-updater-e2e/src/steps/client-updater.steps.ts:69"
+            },
+            "result": {
+              "status": "passed",
+              "duration": 684750
+            }
+          },
+          {
+            "arguments": [],
+            "keyword": "When ",
+            "line": 23,
+            "name": "I enter \"adv-2\" as the advisor ID and submit",
+            "match": {
+              "location": "apps/client-updater-e2e/src/steps/client-updater.steps.ts:91"
+            },
+            "result": {
+              "status": "passed",
+              "duration": 424828000
+            }
+          },
+          {
+            "arguments": [],
+            "keyword": "Then ",
+            "line": 24,
+            "name": "I should be redirected to \"/\" with no client ID in the URL",
+            "match": {
+              "location": "apps/client-updater-e2e/src/steps/client-updater.steps.ts:69"
+            },
+            "result": {
+              "status": "passed",
+              "duration": 2157499
+            }
+          },
+          {
+            "arguments": [],
+            "keyword": "And ",
+            "line": 25,
+            "name": "I should see the advisor context banner for \"James Carter\"",
+            "match": {
+              "location": "apps/client-updater-e2e/src/steps/client-updater.steps.ts:123"
+            },
+            "result": {
+              "status": "passed",
+              "duration": 6054457
+            }
+          },
+          {
+            "arguments": [],
+            "keyword": "When ",
+            "line": 26,
+            "name": "I search for \"Carol\"",
+            "match": {
+              "location": "apps/client-updater-e2e/src/steps/client-updater.steps.ts:78"
+            },
+            "result": {
+              "status": "passed",
+              "duration": 28514875
+            }
+          },
+          {
+            "arguments": [],
+            "keyword": "Then ",
+            "line": 27,
+            "name": "I should see a search result for \"Carol Martinez\"",
+            "match": {
+              "location": "apps/client-updater-e2e/src/steps/client-updater.steps.ts:98"
+            },
+            "result": {
+              "status": "passed",
+              "duration": 2077208
+            }
+          },
+          {
+            "keyword": "After",
+            "hidden": true,
+            "result": {
+              "status": "passed",
+              "duration": 18753457
+            }
+          }
+        ],
+        "tags": [],
+        "type": "scenario"
+      },
+      {
+        "description": "",
+        "id": "role-aware-flows;support-staff-can-look-up-a-client-directly-by-id",
+        "keyword": "Scenario",
+        "line": 29,
+        "name": "Support staff can look up a client directly by ID",
+        "steps": [
+          {
+            "keyword": "Before",
+            "hidden": true,
+            "result": {
+              "status": "passed",
+              "duration": 106287542
+            }
+          },
+          {
+            "arguments": [],
+            "keyword": "Given ",
+            "line": 30,
+            "name": "I log in as \"support_staff\"",
+            "match": {
+              "location": "apps/client-updater-e2e/src/steps/client-updater.steps.ts:7"
+            },
+            "result": {
+              "status": "passed",
+              "duration": 428458
+            }
+          },
+          {
+            "arguments": [],
+            "keyword": "And ",
+            "line": 31,
+            "name": "the app is open at the home page",
+            "match": {
+              "location": "apps/client-updater-e2e/src/steps/client-updater.steps.ts:21"
+            },
+            "result": {
+              "status": "passed",
+              "duration": 808152042
+            }
+          },
+          {
+            "arguments": [],
+            "keyword": "When ",
+            "line": 32,
+            "name": "I lookup client ID \"c-3\"",
+            "match": {
+              "location": "apps/client-updater-e2e/src/steps/client-updater.steps.ts:84"
+            },
+            "result": {
+              "status": "passed",
+              "duration": 481744957
+            }
+          },
+          {
+            "arguments": [],
+            "keyword": "Then ",
+            "line": 33,
+            "name": "the client profile should load automatically",
+            "match": {
+              "location": "apps/client-updater-e2e/src/steps/client-updater.steps.ts:160"
+            },
+            "result": {
+              "status": "passed",
+              "duration": 8436625
+            }
+          },
+          {
+            "arguments": [],
+            "keyword": "And ",
+            "line": 34,
+            "name": "I should see a client named \"Carol Martinez\"",
+            "match": {
+              "location": "apps/client-updater-e2e/src/steps/client-updater.steps.ts:130"
+            },
+            "result": {
+              "status": "passed",
+              "duration": 3180165
+            }
+          },
+          {
+            "keyword": "After",
+            "hidden": true,
+            "result": {
+              "status": "passed",
+              "duration": 22612042
+            }
+          }
+        ],
+        "tags": [],
+        "type": "scenario"
+      }
+    ],
+    "id": "role-aware-flows",
+    "line": 1,
+    "keyword": "Feature",
+    "name": "Role-Aware Flows",
+    "tags": [],
+    "uri": "apps/client-updater-e2e/features/role-aware.feature"
+  }
+]

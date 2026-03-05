@@ -1,0 +1,12 @@
+yarn run v1.22.22
+$ /Users/sanoopbhaskerv/workspace/office-projects/interested-party/interested-party/node_modules/.bin/nx g @nx/workspace:ci-workflow --ci=skip,skip --useRunMany=true
+
+ NX  Generating @nx/workspace:ci-workflow
+
+
+ NX   Property 'ci' does not match the schema. 'skip,skip' should be one of github,circleci,azure,bitbucket-pipelines,gitlab.
+
+
+info Visit https://yarnpkg.com/en/docs/cli/run for documentation about this command.
+
+error Command failed with exit code 1.

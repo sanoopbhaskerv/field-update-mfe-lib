@@ -1,0 +1,82 @@
+/* StepIndicator CSS Module */
+.container {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 1.5rem 0;
+    gap: 0;
+}
+
+.step {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 0.4rem;
+    position: relative;
+}
+
+.circle {
+    width: 2.2rem;
+    height: 2.2rem;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: 700;
+    font-size: 0.85rem;
+    transition: background 0.3s, color 0.3s;
+}
+
+.label {
+    font-size: 0.72rem;
+    font-weight: 600;
+    letter-spacing: 0.04em;
+    text-transform: uppercase;
+    white-space: nowrap;
+}
+
+/* States */
+.active .circle {
+    background: var(--color-primary);
+    color: white;
+    box-shadow: 0 0 0 4px rgba(99, 102, 241, 0.2);
+}
+
+.active .label {
+    color: var(--color-primary);
+}
+
+.completed .circle {
+    background: var(--color-success);
+    color: white;
+}
+
+.completed .label {
+    color: var(--color-success);
+}
+
+.upcoming .circle {
+    background: var(--color-surface-2);
+    color: var(--color-text-muted);
+    border: 2px solid var(--color-border);
+}
+
+.upcoming .label {
+    color: var(--color-text-muted);
+}
+
+/* Connector line between steps */
+.connector {
+    flex: 1;
+    height: 2px;
+    background: var(--color-border);
+    min-width: 3rem;
+    max-width: 5rem;
+    transition: background 0.3s;
+    align-self: flex-start;
+    margin-top: 1.1rem;
+}
+
+.connectorCompleted {
+    background: var(--color-success);
+}
