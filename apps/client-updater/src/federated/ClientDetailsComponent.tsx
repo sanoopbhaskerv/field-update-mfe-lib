@@ -1,10 +1,13 @@
+/**
+ * ClientDetailsComponent — federated entry point that displays the
+ * client detail page and wizard routes for a given `clientId`.
+ *
+ * Automatically navigates to `/client` once the profile is loaded.
+ */
 import { useEffect, useRef } from 'react';
-import { useNavigate, useLocation, Routes, Route, Navigate } from 'react-router-dom';
+import { useNavigate, useLocation, Routes, Route } from 'react-router-dom';
 import { useClientContext } from '../context/ClientContext';
-import { ClientDetailPage } from '../pages/ClientDetailPage';
-import { DataEntryPage } from '../pages/wizard/DataEntryPage';
-import { VerifyPage } from '../pages/wizard/VerifyPage';
-import { ConfirmationPage } from '../pages/wizard/ConfirmationPage';
+import { wizardRoutes } from '../routes/WizardRoutes';
 import { FederatedWrapper, FederatedWrapperProps } from './FederatedWrapper';
 import type { OnCompleteCallback } from './FederatedWrapper';
 
@@ -27,10 +30,7 @@ function ClientDetailsInner() {
     return (
         <Routes>
             <Route path="/" element={null} />
-            <Route path="/client" element={<ClientDetailPage />} />
-            <Route path="/client/edit/:field" element={<DataEntryPage />} />
-            <Route path="/client/verify" element={<VerifyPage />} />
-            <Route path="/client/confirmation" element={<ConfirmationPage />} />
+            {wizardRoutes()}
         </Routes>
     );
 }

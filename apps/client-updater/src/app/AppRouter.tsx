@@ -2,10 +2,7 @@ import { Routes, Route, Navigate } from 'react-router-dom';
 import { SearchPage } from '../pages/SearchPage';
 import { SelectAdvisorPage } from '../pages/SelectAdvisorPage';
 import { DeeplinkPage } from '../pages/DeeplinkPage';
-import { ClientDetailPage } from '../pages/ClientDetailPage';
-import { DataEntryPage } from '../pages/wizard/DataEntryPage';
-import { VerifyPage } from '../pages/wizard/VerifyPage';
-import { ConfirmationPage } from '../pages/wizard/ConfirmationPage';
+import { wizardRoutes } from '../routes/WizardRoutes';
 
 /**
  * Route structure — no client IDs in any URL (P1 privacy requirement).
@@ -24,10 +21,7 @@ export function AppRouter() {
             <Route path="/" element={<SearchPage />} />
             <Route path="/select-advisor" element={<SelectAdvisorPage />} />
             <Route path="/update/:contextId" element={<DeeplinkPage />} />
-            <Route path="/client" element={<ClientDetailPage />} />
-            <Route path="/client/edit/:field" element={<DataEntryPage />} />
-            <Route path="/client/verify" element={<VerifyPage />} />
-            <Route path="/client/confirmation" element={<ConfirmationPage />} />
+            {wizardRoutes()}
             <Route path="*" element={<Navigate to="/" replace />} />
         </Routes>
     );

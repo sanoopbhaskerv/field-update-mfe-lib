@@ -1,14 +1,17 @@
+/**
+ * ClientUpdateComponent — federated entry point that jumps directly
+ * into the edit wizard for a specific `fieldToEdit` on a given `clientId`.
+ *
+ * Automatically selects the field and navigates to the data entry step
+ * once the client profile is loaded.
+ */
 import { useEffect, useRef } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, Routes, Route } from 'react-router-dom';
 import { useClientContext } from '../context/ClientContext';
-import { DataEntryPage } from '../pages/wizard/DataEntryPage';
-import { VerifyPage } from '../pages/wizard/VerifyPage';
-import { ConfirmationPage } from '../pages/wizard/ConfirmationPage';
-import { ClientDetailPage } from '../pages/ClientDetailPage';
+import { wizardRoutes } from '../routes/WizardRoutes';
 import { FederatedWrapper, FederatedWrapperProps } from './FederatedWrapper';
 import type { OnCompleteCallback } from './FederatedWrapper';
 import type { ClientField } from '../types/client.types';
-import { Routes, Route, Navigate } from 'react-router-dom';
 
 export interface ClientUpdateProps extends Omit<FederatedWrapperProps, 'children'> {
     fieldToEdit: ClientField;
@@ -32,10 +35,7 @@ function ClientUpdateInner({ fieldToEdit }: { fieldToEdit: ClientField }) {
     return (
         <Routes>
             <Route path="/" element={null} />
-            <Route path="/client" element={<ClientDetailPage />} />
-            <Route path="/client/edit/:field" element={<DataEntryPage />} />
-            <Route path="/client/verify" element={<VerifyPage />} />
-            <Route path="/client/confirmation" element={<ConfirmationPage />} />
+            {wizardRoutes()}
         </Routes>
     );
 }

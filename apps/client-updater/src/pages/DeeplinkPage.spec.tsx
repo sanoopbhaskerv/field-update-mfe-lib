@@ -1,7 +1,7 @@
 import { render, screen, waitFor, fireEvent } from '@testing-library/react';
 import { DeeplinkPage } from './DeeplinkPage';
 import { useClientContext } from '../context/ClientContext';
-import { contextService, advisorService, clientService } from '../services/clientService';
+import { contextService, signOnService, advisorService, clientService } from '../services';
 import { vi } from 'vitest';
 import { useNavigate, useParams } from 'react-router-dom';
 
@@ -9,8 +9,9 @@ vi.mock('../context/ClientContext', () => ({
     useClientContext: vi.fn(),
 }));
 
-vi.mock('../services/clientService', () => ({
+vi.mock('../services', () => ({
     contextService: { resolveContext: vi.fn() },
+    signOnService: { getSignOn: vi.fn() },
     advisorService: { getAdvisorById: vi.fn() },
     clientService: { getClientById: vi.fn() },
 }));
@@ -24,6 +25,7 @@ describe('DeeplinkPage', () => {
     const mockNavigate = vi.fn();
     const mockSetClient = vi.fn();
     const mockSetAdvisor = vi.fn();
+    const mockSetRole = vi.fn();
     const mockSetLoading = vi.fn();
     const mockSetError = vi.fn();
 
@@ -31,15 +33,20 @@ describe('DeeplinkPage', () => {
         vi.clearAllMocks();
         (useNavigate as ReturnType<typeof vi.fn>).mockReturnValue(mockNavigate);
 
-        // Base context mock
         (useClientContext as unknown as ReturnType<typeof vi.fn>).mockReturnValue({
             client: null,
             setClient: mockSetClient,
             setAdvisor: mockSetAdvisor,
+            setRole: mockSetRole,
             setLoading: mockSetLoading,
             setError: mockSetError,
             isLoading: false,
             error: null,
+        });
+
+        // Default mock for signOn (used by useResolveContext internally)
+        (signOnService.getSignOn as ReturnType<typeof vi.fn>).mockResolvedValue({
+            role: 'advisor', userId: 'adv-1', displayName: 'Sarah',
         });
     });
 
@@ -107,7 +114,7 @@ describe('DeeplinkPage', () => {
         render(<DeeplinkPage />);
 
         await waitFor(() => {
-            expect(mockSetError).toHaveBeenCalledWith('Client not found in context. Please contact support.');
+            expect(mockSetError).toHaveBeenCalledWith('Client not found.');
         });
     });
 

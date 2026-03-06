@@ -1,6 +1,7 @@
 import { useEffect, useState } from 'react';
 import { AppRouter } from './AppRouter';
-import { AppHeader } from '../components/AppHeader';
+import { AppHeader } from '../components/header/AppHeader';
+import { ErrorBoundary } from '../components/ErrorBoundary';
 import { ClientProvider, useClientContext } from '../context/ClientContext';
 import { signOnService } from '../services/clientService';
 
@@ -19,21 +20,21 @@ function AppBootstrap() {
       .then((info) => setRole(info.role, info.userId, info.displayName))
       .catch(() => setBootError('Unable to verify your session. Please refresh or contact support.'))
       .finally(() => setInitialising(false));
-  }, []); // eslint-disable-line react-hooks/exhaustive-deps
+  }, [setRole]);
 
   if (initialising) {
     return (
-      <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', height: '60vh', flexDirection: 'column', gap: '1rem' }}>
+      <div className="centered-state centered-state--page">
         <div className="spinner" />
-        <p style={{ color: 'var(--color-text-muted)', fontSize: '0.9rem' }}>Verifying session…</p>
+        <p className="page-subtitle">Verifying session…</p>
       </div>
     );
   }
 
   if (bootError) {
     return (
-      <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', height: '60vh' }}>
-        <div className="card" style={{ maxWidth: 420, textAlign: 'center' }}>
+      <div className="centered-state centered-state--page">
+        <div className="card card--narrow">
           <div className="alert alert-error">{bootError}</div>
         </div>
       </div>
@@ -51,14 +52,16 @@ function AppBootstrap() {
  */
 export function App() {
   return (
-    <ClientProvider>
-      <div className="app-shell">
-        <AppHeader />
-        <main>
-          <AppBootstrap />
-        </main>
-      </div>
-    </ClientProvider>
+    <ErrorBoundary>
+      <ClientProvider>
+        <div className="app-shell">
+          <AppHeader />
+          <main>
+            <AppBootstrap />
+          </main>
+        </div>
+      </ClientProvider>
+    </ErrorBoundary>
   );
 }
 

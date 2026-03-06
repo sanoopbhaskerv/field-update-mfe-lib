@@ -10,7 +10,7 @@ describe('StepIndicator', () => {
     });
 
     it('should mark past steps as completed', () => {
-        const { container } = render(<StepIndicator currentStep={3} />);
+        render(<StepIndicator currentStep={3} />);
         // 1 and 2 should have ✓ instead of numbers
         const checkmarks = screen.getAllByText('✓');
         expect(checkmarks.length).toBe(2);

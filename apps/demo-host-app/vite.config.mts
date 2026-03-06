@@ -19,7 +19,9 @@ export default defineConfig(() => ({
     federation({
       name: 'demo_host_app',
       remotes: {
-        client_updater: 'http://localhost:4300/assets/remoteEntry.js',
+        client_updater:
+          process.env.VITE_CLIENT_UPDATER_URL ??
+          'http://localhost:4300/assets/remoteEntry.js',
       },
       shared: ['react', 'react-dom', 'react-router-dom']
     })

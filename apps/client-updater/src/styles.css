@@ -65,6 +65,10 @@ body {
     -webkit-font-smoothing: antialiased;
 }
 
+.app-shell--embedded {
+    min-height: auto;
+}
+
 .app-header {
     background: rgba(26, 26, 46, 0.9);
     backdrop-filter: blur(12px);
@@ -245,6 +249,10 @@ h3 {
     color: #fca5a5;
 }
 
+.alert--mt {
+    margin-top: 1rem;
+}
+
 .alert-success {
     background: rgba(34, 197, 94, 0.1);
     border: 1px solid rgba(34, 197, 94, 0.3);
@@ -256,6 +264,449 @@ h3 {
     border: none;
     border-top: 1px solid var(--color-border);
     margin: 1.5rem 0;
+}
+
+/* --- Result button (search results) --- */
+.result-button {
+    width: 100%;
+    text-align: left;
+    background: var(--color-surface-2);
+    border: 1.5px solid var(--color-border);
+    border-radius: var(--radius-md);
+    padding: 1rem 1.25rem;
+    cursor: pointer;
+    transition: border-color 0.2s, transform 0.15s;
+    color: var(--color-text);
+    font-family: inherit;
+}
+
+.result-button:hover:not(:disabled) {
+    border-color: var(--color-primary);
+    transform: translateY(-1px);
+}
+
+.result-button:disabled {
+    cursor: not-allowed;
+    opacity: 0.5;
+}
+
+/* --- Page headings --- */
+.page-title {
+    font-size: 1.5rem;
+    margin-bottom: 0.25rem;
+}
+
+.page-title--lg {
+    font-size: 1.6rem;
+    margin-bottom: 0.4rem;
+}
+
+.page-subtitle {
+    color: var(--color-text-muted);
+    margin-bottom: 1.75rem;
+    font-size: 0.9rem;
+}
+
+.page-subtitle--md {
+    font-size: 0.95rem;
+}
+
+/* --- Card sections --- */
+.card__heading {
+    margin-bottom: 1.75rem;
+}
+
+.card--mt {
+    margin-top: 1rem;
+}
+
+.card--center {
+    text-align: center;
+}
+
+/* --- Section label (uppercase muted) --- */
+.section-label {
+    font-size: 0.82rem;
+    color: var(--color-text-muted);
+    text-transform: uppercase;
+    letter-spacing: 0.07em;
+    font-weight: 600;
+    margin-bottom: 1rem;
+}
+
+/* --- Field list (client detail) --- */
+.field-list {
+    display: flex;
+    flex-direction: column;
+    gap: 0.75rem;
+}
+
+.field-row {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    background: var(--color-surface-2);
+    border: 1.5px solid var(--color-border);
+    border-radius: var(--radius-md);
+    padding: 1rem 1.25rem;
+    gap: 1rem;
+}
+
+.field-row__content {
+    flex: 1;
+    min-width: 0;
+}
+
+.field-row__label {
+    font-size: 0.72rem;
+    font-weight: 600;
+    color: var(--color-text-muted);
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+    margin-bottom: 0.2rem;
+}
+
+.field-row__value {
+    font-size: 0.97rem;
+    color: var(--color-text);
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+/* --- Button bars --- */
+.button-bar {
+    display: flex;
+    gap: 0.75rem;
+    justify-content: flex-end;
+}
+
+.button-bar--center {
+    justify-content: center;
+    flex-wrap: wrap;
+}
+
+/* --- Back link (ghost button at top of page) --- */
+.btn-back {
+    margin-bottom: 1rem;
+    padding-left: 0;
+}
+
+/* --- Centered state containers (loading / error) --- */
+.centered-state {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-direction: column;
+    gap: 1rem;
+}
+
+.centered-state--page {
+    height: 60vh;
+}
+
+.centered-state--panel {
+    height: 100%;
+    min-height: 300px;
+}
+
+/* --- Success icon (confirmation page) --- */
+.success-icon {
+    width: 5rem;
+    height: 5rem;
+    border-radius: 50%;
+    background: rgba(34, 197, 94, 0.12);
+    border: 2px solid rgba(34, 197, 94, 0.3);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 2.2rem;
+    margin: 0 auto 1.5rem;
+}
+
+/* --- Diff summary (verify page) --- */
+.diff-summary {
+    background: var(--color-surface-2);
+    border: 1.5px solid var(--color-border);
+    border-radius: var(--radius-md);
+    padding: 1.25rem;
+    margin-bottom: 1.25rem;
+}
+
+.diff-summary__label {
+    font-size: 0.72rem;
+    font-weight: 700;
+    color: var(--color-primary);
+    text-transform: uppercase;
+    letter-spacing: 0.07em;
+    margin-bottom: 1rem;
+}
+
+.diff-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 1rem;
+}
+
+.diff-column__label {
+    font-size: 0.75rem;
+    color: var(--color-text-muted);
+    margin-bottom: 0.35rem;
+}
+
+.diff-old {
+    background: rgba(239, 68, 68, 0.08);
+    border: 1px solid rgba(239, 68, 68, 0.2);
+    border-radius: var(--radius-sm);
+    padding: 0.6rem 0.85rem;
+    font-size: 0.95rem;
+    text-decoration: line-through;
+    color: #fca5a5;
+}
+
+.diff-new {
+    background: rgba(34, 197, 94, 0.08);
+    border: 1px solid rgba(34, 197, 94, 0.2);
+    border-radius: var(--radius-sm);
+    padding: 0.6rem 0.85rem;
+    font-size: 0.95rem;
+    color: #86efac;
+    font-weight: 600;
+}
+
+/* --- Summary box (confirmation page) --- */
+.summary-box {
+    background: var(--color-surface-2);
+    border: 1px solid var(--color-border);
+    border-radius: var(--radius-md);
+    padding: 1rem 1.5rem;
+    text-align: left;
+    margin-bottom: 2rem;
+}
+
+.summary-box__label {
+    font-size: 0.72rem;
+    color: var(--color-text-muted);
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+    margin-bottom: 0.25rem;
+}
+
+.summary-box__value {
+    font-size: 1rem;
+    color: #86efac;
+    font-weight: 600;
+}
+
+/* --- Search row (input + button inline) --- */
+.search-row {
+    display: flex;
+    gap: 0.75rem;
+}
+
+/* --- Result list --- */
+.result-list {
+    list-style: none;
+    display: flex;
+    flex-direction: column;
+    gap: 0.75rem;
+    margin-top: 1rem;
+}
+
+.result-button__name {
+    font-weight: 600;
+    margin-bottom: 0.2rem;
+}
+
+.result-button__email {
+    font-size: 0.85rem;
+    color: var(--color-text-muted);
+}
+
+/* --- No results --- */
+.no-results {
+    color: var(--color-text-muted);
+    text-align: center;
+    padding: 1.5rem 0;
+}
+
+/* --- Current value (readonly display) --- */
+.current-value {
+    background: rgba(255, 255, 255, 0.04);
+    border: 1px solid var(--color-border);
+    border-radius: var(--radius-sm);
+    padding: 0.75rem 1rem;
+    color: var(--color-text-muted);
+    font-size: 0.95rem;
+}
+
+/* --- Form validation area --- */
+.form-validation {
+    min-height: 1.25rem;
+    margin-top: 0.25rem;
+}
+
+.form-error--block {
+    display: block;
+}
+
+/* --- Advisor context bar --- */
+.advisor-bar {
+    background: rgba(245, 158, 11, 0.06);
+    border-bottom: 1px solid rgba(245, 158, 11, 0.2);
+    padding: 0.45rem 2rem;
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    flex-wrap: wrap;
+    font-size: 0.82rem;
+    min-height: 2.5rem;
+}
+
+.advisor-bar--active {
+    background: rgba(99, 102, 241, 0.12);
+    border-bottom-color: rgba(99, 102, 241, 0.25);
+}
+
+.advisor-bar__label {
+    color: var(--color-text-muted);
+    flex-shrink: 0;
+}
+
+.advisor-bar__name {
+    color: var(--color-primary);
+}
+
+.advisor-bar__separator {
+    color: var(--color-border);
+}
+
+.advisor-bar__clear {
+    background: none;
+    border: none;
+    cursor: pointer;
+    color: var(--color-text-muted);
+    font-size: 0.78rem;
+    padding: 0.15rem 0.4rem;
+    border-radius: 4px;
+    text-decoration: underline;
+}
+
+.advisor-bar__form {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    flex-wrap: wrap;
+}
+
+.advisor-bar__input {
+    background: rgba(255, 255, 255, 0.07);
+    border: 1px solid rgba(255, 255, 255, 0.15);
+    border-radius: 6px;
+    padding: 0.3rem 0.75rem;
+    color: var(--color-text);
+    font-size: 0.8rem;
+    width: 220px;
+    outline: none;
+}
+
+.advisor-bar__input--error {
+    border-color: rgba(239, 68, 68, 0.6);
+}
+
+.advisor-bar__submit {
+    background: var(--color-primary);
+    border: none;
+    border-radius: 6px;
+    color: #fff;
+    font-size: 0.78rem;
+    padding: 0.3rem 0.85rem;
+    flex-shrink: 0;
+}
+
+.advisor-bar__submit:enabled {
+    cursor: pointer;
+    opacity: 1;
+}
+
+.advisor-bar__submit:disabled {
+    cursor: not-allowed;
+    opacity: 0.5;
+}
+
+.advisor-bar__error {
+    color: var(--color-error);
+    font-size: 0.76rem;
+}
+
+/* --- Demo hint (SelectAdvisorPage) --- */
+.demo-hint {
+    font-size: 0.82rem;
+    color: var(--color-text-muted);
+}
+
+.demo-hint__title {
+    display: block;
+    margin-bottom: 0.4rem;
+    color: var(--color-text);
+}
+
+.demo-hint__code {
+    background: var(--color-surface-2);
+    padding: 0.15rem 0.4rem;
+    border-radius: 4px;
+    margin-right: 8px;
+}
+
+.demo-hint__code--block {
+    display: inline-block;
+    margin-top: 0.3rem;
+}
+
+/* --- Textarea multiline --- */
+.form-input--multiline {
+    resize: vertical;
+    font-family: inherit;
+}
+
+/* --- Small edit button inside field row --- */
+.btn--sm {
+    flex-shrink: 0;
+    font-size: 0.85rem;
+    padding: 0.5rem 1rem;
+}
+
+/* --- Utility: max-width card for error states --- */
+.card--narrow {
+    max-width: 420px;
+    text-align: center;
+}
+
+/* --- Utility: flex-shrink-0 for buttons adjacent to inputs --- */
+.flex-shrink-0 {
+    flex-shrink: 0;
+}
+
+.w-full {
+    width: 100%;
+}
+
+/* Confirmation subtitle with constrained width */
+.confirmation-subtitle {
+    color: var(--color-text-muted);
+    margin-bottom: 1.75rem;
+    font-size: 0.95rem;
+    max-width: 380px;
+    margin: 0 auto 1.75rem;
+}
+
+/* --- Text color utilities --- */
+.text-primary {
+    color: var(--color-primary);
+}
+
+.text-body {
+    color: var(--color-text);
 }
 
 /* --- Responsive --- */

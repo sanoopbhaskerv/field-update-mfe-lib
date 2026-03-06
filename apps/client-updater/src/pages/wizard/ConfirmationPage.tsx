@@ -1,3 +1,11 @@
+/**
+ * ConfirmationPage — wizard step 3.
+ *
+ * Displays a success message with the updated value.
+ * Offers two actions: "Edit Another Field" (returns to the detail page)
+ * or "All Done" (fires `onComplete` in federated mode, or resets
+ * context and returns to search in standalone mode).
+ */
 import { useNavigate, Navigate } from 'react-router-dom';
 import { useClientContext } from '../../context/ClientContext';
 import { FIELD_LABELS } from '../../types/client.types';
@@ -36,43 +44,25 @@ export function ConfirmationPage() {
         <div className="page-container">
             <StepIndicator currentStep={3} />
 
-            <div className="card" style={{ marginTop: '1rem', textAlign: 'center' }}>
-                <div style={{
-                    width: '5rem',
-                    height: '5rem',
-                    borderRadius: '50%',
-                    background: 'rgba(34,197,94,0.12)',
-                    border: '2px solid rgba(34,197,94,0.3)',
-                    display: 'flex',
-                    alignItems: 'center',
-                    justifyContent: 'center',
-                    fontSize: '2.2rem',
-                    margin: '0 auto 1.5rem',
-                }}>
+            <div className="card card--mt card--center">
+                <div className="success-icon">
                     ✓
                 </div>
 
-                <h2 style={{ fontSize: '1.4rem', marginBottom: '0.5rem' }}>Update Successful!</h2>
-                <p style={{ color: 'var(--color-text-muted)', marginBottom: '1.75rem', fontSize: '0.95rem', maxWidth: 380, margin: '0 auto 1.75rem' }}>
-                    <strong style={{ color: 'var(--color-text)' }}>{client.name}</strong>'s{' '}
-                    <strong style={{ color: 'var(--color-primary)' }}>{label}</strong> has been updated successfully.
+                <h2 className="page-title">Update Successful!</h2>
+                <p className="confirmation-subtitle">
+                    <strong className="text-body">{client.name}</strong>'s{' '}
+                    <strong className="text-primary">{label}</strong> has been updated successfully.
                 </p>
 
-                <div style={{
-                    background: 'var(--color-surface-2)',
-                    border: '1px solid var(--color-border)',
-                    borderRadius: 'var(--radius-md)',
-                    padding: '1rem 1.5rem',
-                    textAlign: 'left',
-                    marginBottom: '2rem',
-                }}>
-                    <div style={{ fontSize: '0.72rem', color: 'var(--color-text-muted)', textTransform: 'uppercase', letterSpacing: '0.06em', marginBottom: '0.25rem' }}>
+                <div className="summary-box">
+                    <div className="summary-box__label">
                         {label}
                     </div>
-                    <div style={{ fontSize: '1rem', color: '#86efac', fontWeight: 600 }}>{newValue}</div>
+                    <div className="summary-box__value">{newValue}</div>
                 </div>
 
-                <div style={{ display: 'flex', gap: '0.75rem', justifyContent: 'center', flexWrap: 'wrap' }}>
+                <div className="button-bar button-bar--center">
                     <button className="btn btn-secondary" onClick={handleEditAnother}>
                         Edit Another Field
                     </button>

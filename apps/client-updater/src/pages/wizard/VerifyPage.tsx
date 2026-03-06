@@ -39,61 +39,32 @@ export function VerifyPage() {
         <div className="page-container">
             <StepIndicator currentStep={2} />
 
-            <div className="card" style={{ marginTop: '1rem' }}>
-                <h2 style={{ fontSize: '1.3rem', marginBottom: '0.4rem' }}>Confirm Your Changes</h2>
-                <p style={{ color: 'var(--color-text-muted)', marginBottom: '1.75rem', fontSize: '0.9rem' }}>
+            <div className="card card--mt">
+                <h2 className="page-title">Confirm Your Changes</h2>
+                <p className="page-subtitle">
                     Please review the change before submitting.
                 </p>
 
                 {/* Diff summary */}
-                <div style={{
-                    background: 'var(--color-surface-2)',
-                    border: '1.5px solid var(--color-border)',
-                    borderRadius: 'var(--radius-md)',
-                    padding: '1.25rem',
-                    marginBottom: '1.25rem',
-                }}>
-                    <div style={{
-                        fontSize: '0.72rem',
-                        fontWeight: 700,
-                        color: 'var(--color-primary)',
-                        textTransform: 'uppercase',
-                        letterSpacing: '0.07em',
-                        marginBottom: '1rem',
-                    }}>
+                <div className="diff-summary">
+                    <div className="diff-summary__label">
                         {label}
                     </div>
 
-                    <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '1rem' }}>
+                    <div className="diff-grid">
                         <div>
-                            <div style={{ fontSize: '0.75rem', color: 'var(--color-text-muted)', marginBottom: '0.35rem' }}>
+                            <div className="diff-column__label">
                                 Current
                             </div>
-                            <div style={{
-                                background: 'rgba(239,68,68,0.08)',
-                                border: '1px solid rgba(239,68,68,0.2)',
-                                borderRadius: 'var(--radius-sm)',
-                                padding: '0.6rem 0.85rem',
-                                fontSize: '0.95rem',
-                                textDecoration: 'line-through',
-                                color: '#fca5a5',
-                            }}>
+                            <div className="diff-old">
                                 {oldValue || '(not set)'}
                             </div>
                         </div>
                         <div>
-                            <div style={{ fontSize: '0.75rem', color: 'var(--color-text-muted)', marginBottom: '0.35rem' }}>
+                            <div className="diff-column__label">
                                 New
                             </div>
-                            <div style={{
-                                background: 'rgba(34,197,94,0.08)',
-                                border: '1px solid rgba(34,197,94,0.2)',
-                                borderRadius: 'var(--radius-sm)',
-                                padding: '0.6rem 0.85rem',
-                                fontSize: '0.95rem',
-                                color: '#86efac',
-                                fontWeight: 600,
-                            }}>
+                            <div className="diff-new">
                                 {newValue}
                             </div>
                         </div>
@@ -104,7 +75,7 @@ export function VerifyPage() {
 
                 <hr className="divider" />
 
-                <div style={{ display: 'flex', gap: '0.75rem', justifyContent: 'flex-end' }}>
+                <div className="button-bar">
                     <button className="btn btn-secondary" onClick={() => navigate(-1)} disabled={isLoading}>
                         ← Back
                     </button>

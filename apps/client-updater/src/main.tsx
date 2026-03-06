@@ -1,3 +1,9 @@
+/**
+ * Application entry point.
+ *
+ * Mounts the standalone React app with StrictMode and BrowserRouter.
+ * In federated mode, the host uses {@link FederatedWrapper} instead.
+ */
 import { StrictMode } from 'react';
 import { BrowserRouter } from 'react-router-dom';
 import * as ReactDOM from 'react-dom/client';

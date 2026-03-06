@@ -1,7 +1,8 @@
 import { useEffect } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
-import { contextService } from '../services/clientService';
-import { useClientContext, useResolveContext } from '../context/ClientContext';
+import { contextService } from '../services';
+import { useClientContext } from '../context/ClientContext';
+import { useResolveContext } from '../hooks/useResolveContext';
 
 /**
  * DeeplinkPage — resolves an opaque contextId to a ContextResolution.
@@ -42,14 +43,11 @@ export function DeeplinkPage() {
             const { advisorId, clientId } = resolution;
 
             // Use the shared hook to load auth, advisor, and client profiles
-            const result = await resolveContext(clientId, advisorId);
+            const success = await resolveContext(clientId, advisorId);
 
-            if (!active) {
-                if (result && typeof result !== 'boolean' && result.cancel) result.cancel();
-                return;
-            }
+            if (!active) return;
 
-            if (result && typeof result !== 'boolean' && result.isSuccess) {
+            if (success) {
                 if (clientId) {
                     navigate('/client', { replace: true });
                 } else if (advisorId) {
@@ -68,9 +66,9 @@ export function DeeplinkPage() {
 
     if (isLoading) {
         return (
-            <div className="page-container" style={{ textAlign: 'center' }}>
+            <div className="page-container centered-state centered-state--page">
                 <div className="spinner" />
-                <p style={{ color: 'var(--color-text-muted)' }}>Loading your context…</p>
+                <p className="page-subtitle">Loading your context…</p>
             </div>
         );
     }

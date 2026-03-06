@@ -46,36 +46,19 @@ export function AdvisorContextBar() {
     };
 
     return (
-        <div style={{
-            background: activeAdvisor ? 'rgba(99,102,241,0.12)' : 'rgba(245,158,11,0.06)',
-            borderBottom: activeAdvisor
-                ? '1px solid rgba(99,102,241,0.25)'
-                : '1px solid rgba(245,158,11,0.2)',
-            padding: '0.45rem 2rem',
-            display: 'flex',
-            alignItems: 'center',
-            gap: '0.75rem',
-            flexWrap: 'wrap',
-            fontSize: '0.82rem',
-            minHeight: '2.5rem',
-        }}>
-            <span style={{ color: 'var(--color-text-muted)', flexShrink: 0 }}>
+        <div className={`advisor-bar${activeAdvisor ? ' advisor-bar--active' : ''}`}>
+            <span className="advisor-bar__label">
                 Acting on behalf of:
             </span>
 
             {activeAdvisor ? (
                 <>
-                    <strong style={{ color: 'var(--color-primary)' }}>{activeAdvisor.name}</strong>
-                    <span style={{ color: 'var(--color-border)' }}>|</span>
+                    <strong className="advisor-bar__name">{activeAdvisor.name}</strong>
+                    <span className="advisor-bar__separator">|</span>
                     <button
                         type="button"
                         onClick={handleClear}
-                        style={{
-                            background: 'none', border: 'none', cursor: 'pointer',
-                            color: 'var(--color-text-muted)', fontSize: '0.78rem',
-                            padding: '0.15rem 0.4rem', borderRadius: 4,
-                            textDecoration: 'underline',
-                        }}
+                        className="advisor-bar__clear"
                     >
                         Clear
                     </button>
@@ -83,7 +66,7 @@ export function AdvisorContextBar() {
             ) : (
                 <form
                     onSubmit={handleSubmit}
-                    style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', flexWrap: 'wrap' }}
+                    className="advisor-bar__form"
                 >
                     <input
                         id="header-advisor-id"
@@ -92,33 +75,17 @@ export function AdvisorContextBar() {
                         onChange={(e) => { setAdvisorId(e.target.value); setLookupError(null); }}
                         placeholder="Enter advisor ID (e.g. adv-1)"
                         disabled={loading}
-                        style={{
-                            background: 'rgba(255,255,255,0.07)',
-                            border: lookupError ? '1px solid rgba(239,68,68,0.6)' : '1px solid rgba(255,255,255,0.15)',
-                            borderRadius: '6px',
-                            padding: '0.3rem 0.75rem',
-                            color: 'var(--color-text)',
-                            fontSize: '0.8rem',
-                            width: '220px',
-                            outline: 'none',
-                        }}
+                        className={`advisor-bar__input${lookupError ? ' advisor-bar__input--error' : ''}`}
                     />
                     <button
                         type="submit"
                         disabled={loading || !advisorId.trim()}
-                        style={{
-                            background: 'var(--color-primary)', border: 'none',
-                            borderRadius: '6px', color: '#fff', fontSize: '0.78rem',
-                            padding: '0.3rem 0.85rem',
-                            cursor: advisorId.trim() && !loading ? 'pointer' : 'not-allowed',
-                            opacity: advisorId.trim() && !loading ? 1 : 0.5,
-                            flexShrink: 0,
-                        }}
+                        className="advisor-bar__submit"
                     >
                         {loading ? '…' : 'Go'}
                     </button>
                     {lookupError && (
-                        <span style={{ color: 'var(--color-error)', fontSize: '0.76rem' }}>
+                        <span className="advisor-bar__error">
                             {lookupError}
                         </span>
                     )}

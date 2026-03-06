@@ -1,6 +1,5 @@
-// Backward-compatible re-exports.
-// New code should import from '../services' instead of '../services/clientService'.
 export { signOnService } from './signOn';
 export { advisorService } from './advisor';
 export { clientService } from './client';
 export { contextService } from './context';
+export type { SignOnServicePort, AdvisorServicePort, ClientServicePort, ContextServicePort } from './ports';

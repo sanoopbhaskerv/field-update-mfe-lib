@@ -1,10 +1,10 @@
-import { describe, it, expect, vi, beforeEach } from 'vitest';
+import { describe, it, expect, beforeEach } from 'vitest';
 import {
     signOnService,
     advisorService,
     clientService,
     contextService
-} from './clientService';
+} from './index';
 
 describe('Services', () => {
     describe('signOnService', () => {

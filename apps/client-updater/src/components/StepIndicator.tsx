@@ -1,7 +1,16 @@
+/**
+ * StepIndicator — three-step progress bar for the edit wizard.
+ *
+ * Renders numbered circles (Edit → Verify → Done) connected by
+ * lines. Completed steps show a checkmark; the active step is
+ * highlighted via CSS Modules.
+ */
 import React from 'react';
 import styles from './StepIndicator.module.css';
 
+/** Props accepted by {@link StepIndicator}. */
 interface StepIndicatorProps {
+    /** Which wizard step is currently active (1-indexed). */
     currentStep: 1 | 2 | 3;
 }
 

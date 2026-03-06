@@ -40,16 +40,15 @@ export function SelectAdvisorPage() {
     return (
         <div className="page-container">
             <button
-                className="btn btn-ghost"
+                className="btn btn-ghost btn-back"
                 onClick={() => navigate('/')}
-                style={{ marginBottom: '1rem', paddingLeft: 0 }}
             >
                 ← Back to Search
             </button>
 
             <div className="card">
-                <h1 style={{ fontSize: '1.5rem', marginBottom: '0.4rem' }}>Work on Behalf of Advisor</h1>
-                <p style={{ color: 'var(--color-text-muted)', marginBottom: '1.75rem', fontSize: '0.95rem' }}>
+                <h1 className="page-title">Work on Behalf of Advisor</h1>
+                <p className="page-subtitle page-subtitle--md">
                     Enter the advisor's ID to search and update clients within their book of business.
                 </p>
 
@@ -70,7 +69,7 @@ export function SelectAdvisorPage() {
 
                     {error && <div className="alert alert-error">{error}</div>}
 
-                    <div style={{ display: 'flex', gap: '0.75rem', justifyContent: 'flex-end', marginTop: '0.5rem' }}>
+                    <div className="button-bar" style={{ marginTop: '0.5rem' }}>
                         <button
                             type="button"
                             className="btn btn-secondary"
@@ -91,13 +90,13 @@ export function SelectAdvisorPage() {
 
                 <hr className="divider" />
 
-                <div style={{ fontSize: '0.82rem', color: 'var(--color-text-muted)' }}>
-                    <strong style={{ display: 'block', marginBottom: '0.4rem', color: 'var(--color-text)' }}>
+                <div className="demo-hint">
+                    <strong className="demo-hint__title">
                         💡 Demo advisor IDs
                     </strong>
-                    <code style={{ background: 'var(--color-surface-2)', padding: '0.15rem 0.4rem', borderRadius: 4, marginRight: 8 }}>adv-1</code> Sarah Thompson
+                    <code className="demo-hint__code">adv-1</code> Sarah Thompson
                     <br />
-                    <code style={{ background: 'var(--color-surface-2)', padding: '0.15rem 0.4rem', borderRadius: 4, marginRight: 8, marginTop: '0.3rem', display: 'inline-block' }}>adv-2</code> James Carter
+                    <code className="demo-hint__code demo-hint__code--block">adv-2</code> James Carter
                 </div>
             </div>
         </div>

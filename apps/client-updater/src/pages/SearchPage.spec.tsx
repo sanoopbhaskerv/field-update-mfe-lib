@@ -1,7 +1,7 @@
 import { render, screen, fireEvent, waitFor } from '@testing-library/react';
 import { SearchPage } from './SearchPage';
 import { useClientContext } from '../context/ClientContext';
-import { clientService } from '../services/clientService';
+import { clientService } from '../services';
 import { vi } from 'vitest';
 import { useNavigate } from 'react-router-dom';
 
@@ -9,7 +9,7 @@ vi.mock('../context/ClientContext', () => ({
     useClientContext: vi.fn(),
 }));
 
-vi.mock('../services/clientService', () => ({
+vi.mock('../services', () => ({
     clientService: {
         searchClientsForAdvisor: vi.fn(),
         getClientById: vi.fn(),
