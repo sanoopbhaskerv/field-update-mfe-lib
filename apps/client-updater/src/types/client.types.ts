@@ -48,6 +48,16 @@ export interface ContextResolution {
     advisorId?: string;
 }
 
+// ─── Federated callback ───────────────────────────────────────────────────────
+export type FederatedAction = 'done' | 'edit-another' | 'cancel';
+
+export interface FederatedCompleteEvent {
+    action: FederatedAction;
+    client: ClientProfile;
+    updatedField?: ClientField;
+    newValue?: string;
+}
+
 // ─── Field labels ─────────────────────────────────────────────────────────────
 export const FIELD_LABELS: Record<ClientField, string> = {
     name: 'Full Name',

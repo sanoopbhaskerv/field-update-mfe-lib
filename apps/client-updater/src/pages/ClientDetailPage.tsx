@@ -2,6 +2,7 @@ import { useNavigate, Navigate } from 'react-router-dom';
 import { useClientContext } from '../context/ClientContext';
 import type { ClientField } from '../types/client.types';
 import { FIELD_LABELS } from '../types/client.types';
+import { useOnComplete, useIsFederated } from '../federated/FederatedWrapper';
 
 const FIELDS: ClientField[] = ['name', 'dob', 'email', 'phone', 'address'];
 
@@ -20,6 +21,7 @@ function formatValue(field: ClientField, value: string): string {
 export function ClientDetailPage() {
     const navigate = useNavigate();
     const { client, selectField } = useClientContext();
+    const isFederated = useIsFederated();
 
     // If client was lost (e.g. page refresh), send back to search
     if (!client) {
@@ -34,13 +36,15 @@ export function ClientDetailPage() {
 
     return (
         <div className="page-container">
-            <button
-                className="btn btn-ghost"
-                onClick={() => navigate('/')}
-                style={{ marginBottom: '1rem', paddingLeft: 0 }}
-            >
-                ← Back to Search
-            </button>
+            {!isFederated && (
+                <button
+                    className="btn btn-ghost"
+                    onClick={() => navigate('/')}
+                    style={{ marginBottom: '1rem', paddingLeft: 0 }}
+                >
+                    ← Back to Search
+                </button>
+            )}
 
             <div className="card">
                 <div style={{ marginBottom: '1.75rem' }}>

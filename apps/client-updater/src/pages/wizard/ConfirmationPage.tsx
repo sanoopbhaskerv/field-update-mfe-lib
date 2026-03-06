@@ -2,10 +2,12 @@ import { useNavigate, Navigate } from 'react-router-dom';
 import { useClientContext } from '../../context/ClientContext';
 import { FIELD_LABELS } from '../../types/client.types';
 import { StepIndicator } from '../../components/StepIndicator';
+import { useOnComplete } from '../../federated/FederatedWrapper';
 
 export function ConfirmationPage() {
     const navigate = useNavigate();
     const { client, pendingUpdate, reset } = useClientContext();
+    const onComplete = useOnComplete();
 
     if (!client || !pendingUpdate) {
         return <Navigate to="/" replace />;
@@ -15,13 +17,19 @@ export function ConfirmationPage() {
     const label = FIELD_LABELS[field] ?? field;
 
     const handleEditAnother = () => {
+        onComplete?.({ action: 'edit-another', client, updatedField: field, newValue });
         // Keep client in context, clear wizard state — navigate back to detail
         navigate('/client');
     };
 
     const handleDone = () => {
-        reset();
-        navigate('/');
+        onComplete?.({ action: 'done', client, updatedField: field, newValue });
+        // In federated mode, let the host handle post-completion.
+        // In standalone mode, reset state and go to search.
+        if (!onComplete) {
+            reset();
+            navigate('/');
+        }
     };
 
     return (

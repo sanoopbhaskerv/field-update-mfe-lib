@@ -15,6 +15,7 @@ export function DeeplinkPage() {
     const { contextId } = useParams<{ contextId: string }>();
     const navigate = useNavigate();
     const { client, isLoading, error, setError, setLoading } = useClientContext();
+    const hasClient = !!client;
     const { resolveContext } = useResolveContext();
 
     useEffect(() => {
@@ -23,7 +24,7 @@ export function DeeplinkPage() {
             return;
         }
 
-        if (client) return;
+        if (hasClient) return;
 
         let active = true;
 
@@ -63,7 +64,7 @@ export function DeeplinkPage() {
         });
 
         return () => { active = false; };
-    }, [contextId, resolveContext]); // eslint-disable-line react-hooks/exhaustive-deps
+    }, [contextId, hasClient, navigate, resolveContext, setError, setLoading]);
 
     if (isLoading) {
         return (

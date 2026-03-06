@@ -1,10 +1,27 @@
-import { useEffect } from 'react';
+import { createContext, useContext, useEffect } from 'react';
 import { MemoryRouter } from 'react-router-dom';
 import { ClientProvider, useClientContext, useResolveContext } from '../context/ClientContext';
+import type { FederatedCompleteEvent } from '../types/client.types';
+import '../styles.css';
+
+export type OnCompleteCallback = (event: FederatedCompleteEvent) => void;
+
+const OnCompleteContext = createContext<OnCompleteCallback | undefined>(undefined);
+
+export function useOnComplete(): OnCompleteCallback | undefined {
+    return useContext(OnCompleteContext);
+}
+
+const FederatedContext = createContext(false);
+
+export function useIsFederated(): boolean {
+    return useContext(FederatedContext);
+}
 
 export interface FederatedWrapperProps {
     clientId: string;
     oboAdvisorId?: string;
+    onComplete?: OnCompleteCallback;
     children: React.ReactNode;
 }
 
@@ -42,16 +59,21 @@ function FederatedBootstrap({ clientId, oboAdvisorId, children }: FederatedWrapp
         );
     }
 
-    // Wrap children in a MemoryRouter to keep routes isolated from the Host app
-    return <MemoryRouter>{children}</MemoryRouter>;
+    return <>{children}</>;
 }
 
-export function FederatedWrapper(props: FederatedWrapperProps) {
+export function FederatedWrapper({ onComplete, ...props }: FederatedWrapperProps) {
     return (
         <ClientProvider>
-            <div className="app-shell" style={{ minHeight: 'auto', background: 'transparent' }}>
-                <FederatedBootstrap {...props} />
-            </div>
+            <FederatedContext.Provider value={true}>
+                <OnCompleteContext.Provider value={onComplete}>
+                    <div className="app-shell" style={{ minHeight: 'auto' }}>
+                        <MemoryRouter>
+                            <FederatedBootstrap {...props} />
+                        </MemoryRouter>
+                    </div>
+                </OnCompleteContext.Provider>
+            </FederatedContext.Provider>
         </ClientProvider>
     );
 }

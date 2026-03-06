@@ -4,6 +4,7 @@ import { useClientContext } from '../../context/ClientContext';
 import type { ClientField } from '../../types/client.types';
 import { FIELD_LABELS } from '../../types/client.types';
 import { StepIndicator } from '../../components/StepIndicator';
+import { useOnComplete, useIsFederated } from '../../federated/FederatedWrapper';
 
 function inputType(field: ClientField): string {
     if (field === 'email') return 'email';
@@ -27,6 +28,8 @@ export function DataEntryPage() {
     const { field } = useParams<{ field: ClientField }>();
     const navigate = useNavigate();
     const { client, setPendingUpdate } = useClientContext();
+    const onComplete = useOnComplete();
+    const isFederated = useIsFederated();
 
     const activeField = field as ClientField;
     const [newValue, setNewValue] = useState('');
@@ -111,7 +114,13 @@ export function DataEntryPage() {
                 <hr className="divider" />
 
                 <div style={{ display: 'flex', gap: '0.75rem', justifyContent: 'flex-end' }}>
-                    <button className="btn btn-secondary" onClick={() => navigate('/client')}>
+                    <button className="btn btn-secondary" onClick={() => {
+                        if (isFederated) {
+                            onComplete?.({ action: 'cancel', client });
+                        } else {
+                            navigate('/client');
+                        }
+                    }}>
                         Cancel
                     </button>
                     <button className="btn btn-primary" onClick={handleNext} disabled={!isValid}>

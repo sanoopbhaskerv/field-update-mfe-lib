@@ -8,6 +8,9 @@
     },
     {
       "path": "./apps/client-updater"
+    },
+    {
+      "path": "./apps/demo-host-app"
     }
   ]
 }
