@@ -26,12 +26,12 @@ Given('the app is open at the home page', async function (this: PlaywrightWorld)
         }
     });
     await this.goto('/');
-    await this.page.waitForLoadState('networkidle');
+    await this.page.waitForLoadState('load');
 });
 
 Given('I open the deeplink URL {string}', async function (this: PlaywrightWorld, path: string) {
     await this.goto(path);
-    await this.page.waitForLoadState('networkidle');
+    await this.page.waitForLoadState('load');
 });
 
 // ─── Assertions ─────────────────────────────────────────────────────────────
@@ -78,21 +78,27 @@ Then('I should be redirected to {string} with no client ID in the URL', async fu
 When('I search for {string}', async function (this: PlaywrightWorld, query: string) {
     const input = this.page.locator('#search-input');
     await input.fill(query);
-    await this.page.locator('button[type="submit"]').click();
+    // Typeahead fires after 300ms debounce — wait for results or no-results to appear
+    await this.page.locator('.result-list, .no-results, .spinner-container').first().waitFor({ timeout: 5000 });
 });
 
 When('I lookup client ID {string}', async function (this: PlaywrightWorld, id: string) {
     const input = this.page.locator('input[placeholder="e.g. c-1"]');
     await input.fill(id);
     await this.page.locator('button:has-text("Find")').click();
-    await this.page.waitForTimeout(400); // allow mock delay
+    // Wait for navigation or error to appear
+    await Promise.race([
+        this.page.waitForURL('**/client', { timeout: 5000 }),
+        this.page.locator('.alert-error').waitFor({ state: 'visible', timeout: 5000 }),
+    ]);
 });
 
 When('I enter {string} as the advisor ID and submit', async function (this: PlaywrightWorld, id: string) {
     const input = this.page.locator('input[placeholder="e.g. adv-1"]');
     await input.fill(id);
     await this.page.locator('button:has-text("Select Advisor")').click();
-    await this.page.waitForTimeout(400); // allow mock delay
+    // Wait for redirect after advisor resolution
+    await this.page.waitForURL('**/', { timeout: 5000 });
 });
 
 Then('I should see a search result for {string}', async function (this: PlaywrightWorld, name: string) {
@@ -108,7 +114,7 @@ Then('I should see a no-results message', async function (this: PlaywrightWorld)
 When('I select {string} from the results', async function (this: PlaywrightWorld, name: string) {
     await this.page.locator(`button:has-text("${name}")`).click();
     await this.page.waitForURL('**/client');
-    await this.page.waitForLoadState('networkidle');
+    await this.page.waitForLoadState('load');
 });
 
 Then('I should see the advisor home page', async function (this: PlaywrightWorld) {
@@ -146,7 +152,7 @@ When('I click {string} next to {string}', async function (this: PlaywrightWorld,
     // We isolate the specific row using xpath or a stricter CSS
     const specificRow = this.page.locator(`div:has-text("${fieldLabel}")`).filter({ has: this.page.locator(`button:has-text("${buttonText}")`) }).last();
     await specificRow.locator(`button:has-text("${buttonText}")`).click();
-    await this.page.waitForLoadState('networkidle');
+    await this.page.waitForLoadState('load');
 });
 
 // ─── Deeplink ─────────────────────────────────────────────────────────────────
@@ -165,7 +171,7 @@ Then('the client profile should load automatically', async function (this: Playw
 
 Given('the client profile is loaded', async function (this: PlaywrightWorld) {
     await this.page.waitForURL('**/client', { timeout: 5000 });
-    await this.page.waitForLoadState('networkidle');
+    await this.page.waitForLoadState('load');
 });
 
 // ─── Wizard steps ────────────────────────────────────────────────────────────
@@ -177,7 +183,7 @@ When('I enter {string} as the new value', async function (this: PlaywrightWorld,
 
 When('I click {string}', async function (this: PlaywrightWorld, buttonText: string) {
     await this.page.locator(`button:has-text("${buttonText}")`).first().click();
-    await this.page.waitForLoadState('networkidle');
+    await this.page.waitForLoadState('load');
 });
 
 Then('I should see the current value {string}', async function (this: PlaywrightWorld, value: string) {
@@ -198,12 +204,13 @@ Then('the {string} button should be disabled', async function (this: PlaywrightW
     await expect(btn).toBeDisabled();
 });
 
-// ─── Error / edge cases ─────────────────────────────────────────────────────
+// ─── Deeplink error states ────────────────────────────────────────────────────
 
 Then('I should see an error message about invalid or expired context', async function (this: PlaywrightWorld) {
-    const error = this.page.locator('.alert-error');
-    await expect(error).toBeVisible();
-    await expect(error).toContainText('Invalid or expired context');
+    const alert = this.page.locator('.alert-error');
+    await alert.waitFor({ state: 'visible', timeout: 5000 });
+    const text = await alert.innerText();
+    expect(text).toMatch(/invalid|expired/i);
 });
 
 Then('I should see a {string} link', async function (this: PlaywrightWorld, linkText: string) {

@@ -6,7 +6,12 @@ export default [
   ...baseConfig,
   {
     files: ['**/*.ts', '**/*.js'],
-    // Override or add rules here
     rules: {},
+  },
+  {
+    files: ['src/steps/**/*.ts', 'src/support/**/*.ts'],
+    rules: {
+      'playwright/no-standalone-expect': 'off',
+    },
   },
 ];
