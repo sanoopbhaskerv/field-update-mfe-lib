@@ -3,6 +3,7 @@ import { useParams, useNavigate } from 'react-router-dom';
 import { contextService } from '../services';
 import { useClientContext } from '../context/ClientContext';
 import { useResolveContext } from '../hooks/useResolveContext';
+import { Spinner } from '../components/Spinner';
 
 /**
  * DeeplinkPage — resolves an opaque contextId to a ContextResolution.
@@ -67,8 +68,7 @@ export function DeeplinkPage() {
     if (isLoading) {
         return (
             <div className="page-container centered-state centered-state--page">
-                <div className="spinner" />
-                <p className="page-subtitle">Loading your context…</p>
+                <Spinner message="Loading your context…" />
             </div>
         );
     }

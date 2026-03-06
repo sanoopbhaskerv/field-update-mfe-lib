@@ -9,6 +9,7 @@ import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { clientService } from '../../services';
 import { useClientContext } from '../../context/ClientContext';
+import { Spinner } from '../../components/Spinner';
 
 export function ClientIdLookupView() {
     const navigate = useNavigate();
@@ -65,7 +66,7 @@ export function ClientIdLookupView() {
             </form>
 
             {error && <div className="alert alert-error alert--mt">{error}</div>}
-            {isLoading && <div className="spinner" />}
+            {isLoading && <Spinner />}
 
             <hr className="divider" />
 

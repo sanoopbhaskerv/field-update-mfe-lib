@@ -1,4 +1,4 @@
-import { render, screen, fireEvent, waitFor } from '@testing-library/react';
+import { render, screen, fireEvent, waitFor, act } from '@testing-library/react';
 import { SearchPage } from './SearchPage';
 import { useClientContext } from '../context/ClientContext';
 import { clientService } from '../services';
@@ -32,6 +32,13 @@ describe('SearchPage', () => {
     });
 
     describe('Advisor handling', () => {
+        beforeEach(() => {
+            vi.useFakeTimers({ shouldAdvanceTime: true });
+        });
+
+        afterEach(() => {
+            vi.useRealTimers();
+        });
         it('should render name search for advisor role', () => {
             (useClientContext as unknown as ReturnType<typeof vi.fn>).mockReturnValue({
                 userRole: 'advisor',
@@ -60,12 +67,33 @@ describe('SearchPage', () => {
             render(<SearchPage />);
             const input = screen.getByPlaceholderText(/e.g. Alice/);
             fireEvent.change(input, { target: { value: 'John' } });
-            fireEvent.click(screen.getByText('Search'));
+
+            // Advance past debounce
+            act(() => { vi.advanceTimersByTime(300); });
 
             expect(mockSetLoading).toHaveBeenCalledWith(true);
             await waitFor(() => {
                 expect(screen.getByText('John Doe')).toBeTruthy();
             });
+        });
+
+        it('should not search when fewer than 3 characters', () => {
+            (useClientContext as unknown as ReturnType<typeof vi.fn>).mockReturnValue({
+                userRole: 'advisor',
+                effectiveAdvisorId: 'adv-1',
+                signedOnName: 'Sarah',
+                setLoading: mockSetLoading,
+                setError: mockSetError,
+            });
+
+            render(<SearchPage />);
+            const input = screen.getByPlaceholderText(/e.g. Alice/);
+            fireEvent.change(input, { target: { value: 'Jo' } });
+
+            act(() => { vi.advanceTimersByTime(300); });
+
+            expect(clientService.searchClientsForAdvisor).not.toHaveBeenCalled();
+            expect(screen.getByText(/Type at least 3 characters/)).toBeTruthy();
         });
 
         it('should handle search errors gracefully', async () => {
@@ -81,7 +109,8 @@ describe('SearchPage', () => {
             render(<SearchPage />);
             const input = screen.getByPlaceholderText(/e.g. Alice/);
             fireEvent.change(input, { target: { value: 'John' } });
-            fireEvent.click(screen.getByText('Search'));
+
+            act(() => { vi.advanceTimersByTime(300); });
 
             await waitFor(() => {
                 expect(mockSetError).toHaveBeenCalledWith('Search failed. Please try again.');
@@ -101,7 +130,8 @@ describe('SearchPage', () => {
             render(<SearchPage />);
             const input = screen.getByPlaceholderText(/e.g. Alice/);
             fireEvent.change(input, { target: { value: 'Nobody' } });
-            fireEvent.click(screen.getByText('Search'));
+
+            act(() => { vi.advanceTimersByTime(300); });
 
             await waitFor(() => {
                 expect(screen.getByText(/No clients found matching "Nobody"/)).toBeTruthy();
@@ -125,9 +155,10 @@ describe('SearchPage', () => {
 
             render(<SearchPage />);
 
-            // Perform search
+            // Perform search via typeahead
             fireEvent.change(screen.getByPlaceholderText(/e.g. Alice/), { target: { value: 'John' } });
-            fireEvent.click(screen.getByText('Search'));
+
+            act(() => { vi.advanceTimersByTime(300); });
 
             // Click result
             await waitFor(() => {

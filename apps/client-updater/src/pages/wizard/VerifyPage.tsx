@@ -2,6 +2,7 @@ import { useNavigate, Navigate } from 'react-router-dom';
 import { useClientContext } from '../../context/ClientContext';
 import { FIELD_LABELS } from '../../types/client.types';
 import { StepIndicator } from '../../components/StepIndicator';
+import { Spinner } from '../../components/Spinner';
 import { clientService } from '../../services/clientService';
 
 export function VerifyPage() {
@@ -39,7 +40,8 @@ export function VerifyPage() {
         <div className="page-container">
             <StepIndicator currentStep={2} />
 
-            <div className="card card--mt">
+            <div className="card card--mt" style={{ position: 'relative' }}>
+                {isLoading && <Spinner variant="overlay" message="Saving changes…" />}
                 <h2 className="page-title">Confirm Your Changes</h2>
                 <p className="page-subtitle">
                     Please review the change before submitting.

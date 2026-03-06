@@ -14,6 +14,7 @@ import { createContext, useContext, useEffect } from 'react';
 import { MemoryRouter } from 'react-router-dom';
 import { ClientProvider, useClientContext } from '../context/ClientContext';
 import { ErrorBoundary } from '../components/ErrorBoundary';
+import { Spinner } from '../components/Spinner';
 import { useResolveContext } from '../hooks/useResolveContext';
 import type { FederatedCompleteEvent } from '../types/client.types';
 import '../styles.css';
@@ -59,8 +60,7 @@ function FederatedBootstrap({ clientId, oboAdvisorId, children }: FederatedWrapp
     if (isLoading) {
         return (
             <div className="centered-state centered-state--panel">
-                <div className="spinner" />
-                <p className="page-subtitle">Loading client details…</p>
+                <Spinner message="Loading client details…" />
             </div>
         );
     }

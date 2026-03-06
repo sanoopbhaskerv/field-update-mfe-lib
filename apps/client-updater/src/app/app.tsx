@@ -2,6 +2,7 @@ import { useEffect, useState } from 'react';
 import { AppRouter } from './AppRouter';
 import { AppHeader } from '../components/header/AppHeader';
 import { ErrorBoundary } from '../components/ErrorBoundary';
+import { Spinner } from '../components/Spinner';
 import { ClientProvider, useClientContext } from '../context/ClientContext';
 import { signOnService } from '../services/clientService';
 
@@ -25,8 +26,7 @@ function AppBootstrap() {
   if (initialising) {
     return (
       <div className="centered-state centered-state--page">
-        <div className="spinner" />
-        <p className="page-subtitle">Verifying session…</p>
+        <Spinner message="Verifying session…" />
       </div>
     );
   }
