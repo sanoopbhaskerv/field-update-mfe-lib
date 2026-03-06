@@ -1,3 +1,4 @@
+export { default as httpClient } from './httpClient';
 export { signOnService } from './signOn';
 export { advisorService } from './advisor';
 export { clientService } from './client';
