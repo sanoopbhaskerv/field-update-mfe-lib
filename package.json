@@ -4,7 +4,8 @@
   "license": "MIT",
   "scripts": {
     "e2e": "TS_NODE_PROJECT=apps/client-updater-e2e/tsconfig.e2e.json cucumber-js --config cucumber.cjs",
-    "e2e:ci": "BASE_URL=$BASE_URL TS_NODE_PROJECT=apps/client-updater-e2e/tsconfig.e2e.json cucumber-js --config cucumber.cjs"
+    "e2e:ci": "BASE_URL=$BASE_URL TS_NODE_PROJECT=apps/client-updater-e2e/tsconfig.e2e.json cucumber-js --config cucumber.cjs",
+    "prepare": "husky"
   },
   "private": true,
   "dependencies": {
@@ -47,8 +48,10 @@
     "eslint-plugin-playwright": "^1.6.2",
     "eslint-plugin-react": "7.35.0",
     "eslint-plugin-react-hooks": "5.0.0",
+    "husky": "^9.1.7",
     "jiti": "2.4.2",
     "jsdom": "~22.1.0",
+    "lint-staged": "^16.3.2",
     "nx": "22.5.3",
     "prettier": "~3.6.2",
     "ts-node": "^10.9.2",
@@ -60,5 +63,14 @@
   },
   "workspaces": [
     "apps/*"
-  ]
+  ],
+  "lint-staged": {
+    "*.{ts,tsx}": [
+      "eslint --fix",
+      "prettier --write"
+    ],
+    "*.{json,md,css,html}": [
+      "prettier --write"
+    ]
+  }
 }
