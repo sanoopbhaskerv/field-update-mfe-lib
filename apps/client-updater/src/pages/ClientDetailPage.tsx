@@ -1,5 +1,5 @@
 /**
- * ClientDetailPage — displays a client's profile fields with inline
+ * ClientDetailPage — displays a client's profile sections with inline
  * "Edit" buttons that launch the three-step update wizard.
  *
  * In standalone mode a "Back to Search" link is shown; in federated
@@ -7,85 +7,111 @@
  */
 import { useNavigate, Navigate } from 'react-router-dom';
 import { useClientContext } from '../context/ClientContext';
-import type { ClientField } from '../types/client.types';
-import { FIELD_LABELS, EDITABLE_FIELDS } from '../types/client.types';
+import type { ClientSection } from '../types/client.types';
+import {
+  EDITABLE_SECTIONS,
+  SECTION_CONFIG,
+  getDisplayName,
+  formatSectionValue,
+  getSectionValue,
+} from '../types/client.types';
 import { useIsFederated } from '../federated/FederatedWrapper';
 
-/** Format a client field value for display (e.g. ISO date → human-readable). */
-function formatValue(field: ClientField, value: string): string {
-    if (!value) return '—';
-    if (field === 'dob') {
-        try {
-            return new Date(value).toLocaleDateString('en-GB', {
-                day: '2-digit', month: 'long', year: 'numeric',
-            });
-        } catch { return value; }
-    }
-    return value;
-}
-
 export function ClientDetailPage() {
-    const navigate = useNavigate();
-    const { client, selectField } = useClientContext();
-    const isFederated = useIsFederated();
+  const navigate = useNavigate();
+  const { client, selectSection } = useClientContext();
+  const isFederated = useIsFederated();
 
-    // If client was lost (e.g. page refresh), send back to search
-    if (!client) {
-        return <Navigate to="/" replace />;
-    }
+  if (!client) {
+    return <Navigate to="/" replace />;
+  }
 
-    const handleEdit = (field: ClientField) => {
-        selectField(field);
-        // No client ID in the URL — identity stays in context
-        navigate(`/client/edit/${field}`);
-    };
+  const handleEdit = (section: ClientSection, index?: number) => {
+    selectSection(section, index);
+    const path =
+      index !== undefined
+        ? `/client/edit/${section}/${index}`
+        : `/client/edit/${section}`;
+    navigate(path);
+  };
 
-    return (
-        <div className="page-container">
-            {!isFederated && (
-                <button
-                    className="btn btn-ghost btn-back"
-                    onClick={() => navigate('/')}
-                >
-                    ← Back to Search
-                </button>
-            )}
+  const displayName = getDisplayName(client);
 
-            <div className="card">
-                <div className="card__heading">
-                    <h1 className="page-title">
-                        {client.name}
-                    </h1>
-                    <p className="page-subtitle">
-                        Review profile and select a field to update
-                    </p>
-                </div>
+  return (
+    <div className="page-container">
+      {!isFederated && (
+        <button
+          className="btn btn-ghost btn-back"
+          onClick={() => navigate('/')}
+        >
+          ← Back to Search
+        </button>
+      )}
 
-                <p className="section-label">
-                    Select a field to update
-                </p>
-
-                <div className="field-list">
-                    {EDITABLE_FIELDS.map((field) => (
-                        <div key={field} className="field-row">
-                            <div className="field-row__content">
-                                <div className="field-row__label">
-                                    {FIELD_LABELS[field]}
-                                </div>
-                                <div className="field-row__value">
-                                    {formatValue(field, client[field])}
-                                </div>
-                            </div>
-                            <button
-                                className="btn btn-secondary btn--sm"
-                                onClick={() => handleEdit(field)}
-                            >
-                                Edit
-                            </button>
-                        </div>
-                    ))}
-                </div>
-            </div>
+      <div className="card">
+        <div className="card__heading">
+          <h1 className="page-title">{displayName}</h1>
+          <p className="page-subtitle">
+            Review profile and select a section to update
+          </p>
         </div>
-    );
+
+        <p className="section-label">Select a section to update</p>
+
+        <div className="field-list">
+          {EDITABLE_SECTIONS.map((section) => {
+            const meta = SECTION_CONFIG[section];
+
+            if (!meta.isArray) {
+              const value = getSectionValue(client, section);
+              return (
+                <div key={section} className="field-row">
+                  <div className="field-row__content">
+                    <div className="field-row__label">{meta.label}</div>
+                    <div className="field-row__value">
+                      {formatSectionValue(section, value)}
+                    </div>
+                  </div>
+                  <button
+                    className="btn btn-secondary btn--sm"
+                    onClick={() => handleEdit(section)}
+                  >
+                    Edit
+                  </button>
+                </div>
+              );
+            }
+
+            // Array sections (emails, telephone, postalAddress)
+            const items =
+              section === 'email'
+                ? client.emails
+                : section === 'phone'
+                  ? client.telephone
+                  : client.postalAddress;
+
+            return items.map((item, idx) => (
+              <div key={`${section}-${idx}`} className="field-row">
+                <div className="field-row__content">
+                  <div className="field-row__label">
+                    {meta.label}
+                    {items.length > 1 ? ` ${idx + 1}` : ''}
+                  </div>
+                  <div className="field-row__value">
+                    {formatSectionValue(section, item)}
+                  </div>
+                </div>
+                <button
+                  className="btn btn-secondary btn--sm"
+                  onClick={() => handleEdit(section, idx)}
+                >
+                  Edit
+                </button>
+              </div>
+            ));
+          })}
+        </div>
+      </div>
+    </div>
+  );
 }

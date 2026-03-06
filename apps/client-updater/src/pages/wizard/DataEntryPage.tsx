@@ -1,16 +1,18 @@
 /**
  * DataEntryPage — wizard step 1.
  *
- * Displays the current value of the selected field and a form input
- * for the new value. Validates that the new value is non-empty and
- * differs from the current one before allowing the user to proceed.
- * In federated mode, "Cancel" fires the `onComplete` callback instead
- * of navigating back.
+ * Displays the current values of the selected section's sub-fields
+ * and form inputs for the new values. Validates that at least one field
+ * has changed before allowing the user to proceed.
  */
 import { useState } from 'react';
 import { useClientContext } from '../../context/ClientContext';
-import type { ClientField } from '../../types/client.types';
-import { FIELD_CONFIG } from '../../types/client.types';
+import type { ClientSection, SectionValue } from '../../types/client.types';
+import {
+  SECTION_CONFIG,
+  getSectionValue,
+  getDisplayName,
+} from '../../types/client.types';
 import { StepIndicator } from '../../components/StepIndicator';
 import {
   useOnComplete,
@@ -20,40 +22,68 @@ import { useUnsavedChangesWarning } from '../../hooks/useUnsavedChangesWarning';
 import { useNavigate, useParams, Navigate } from 'react-router-dom';
 
 export function DataEntryPage() {
-  const { field } = useParams<{ field: ClientField }>();
+  const { section, index: indexParam } = useParams<{
+    section: ClientSection;
+    index?: string;
+  }>();
   const navigate = useNavigate();
-  const { client, setPendingUpdate } = useClientContext();
+  const { client, pendingUpdate, setPendingUpdate } = useClientContext();
   const onComplete = useOnComplete();
   const isFederated = useIsFederated();
 
-  const activeField = field as ClientField;
-  const [newValue, setNewValue] = useState('');
+  const activeSection = section as ClientSection;
+  const activeIndex = indexParam !== undefined ? Number(indexParam) : undefined;
+  const meta = SECTION_CONFIG[activeSection];
+  const label = meta?.label ?? activeSection;
+
+  const oldValue = client
+    ? getSectionValue(client, activeSection, activeIndex)
+    : undefined;
+
+  const [formValues, setFormValues] = useState<Record<string, string>>(() => {
+    // Restore previously-entered values when navigating back from VerifyPage
+    if (
+      pendingUpdate?.section === activeSection &&
+      pendingUpdate.index === activeIndex
+    ) {
+      return {
+        ...(pendingUpdate.newValue as unknown as Record<string, string>),
+      };
+    }
+    if (!oldValue) return {};
+    return { ...(oldValue as unknown as Record<string, string>) };
+  });
   const [touched, setTouched] = useState(false);
 
-  useUnsavedChangesWarning(newValue.trim().length > 0);
+  const hasChanges = oldValue
+    ? meta?.fields.some(
+        (f) =>
+          (formValues[f.key] ?? '').trim() !==
+          ((oldValue as unknown as Record<string, string>)[f.key] ?? '').trim(),
+      )
+    : false;
 
-  if (!client) {
+  useUnsavedChangesWarning(hasChanges);
+
+  if (!client || !oldValue) {
     return <Navigate to="/" replace />;
   }
 
-  const meta = FIELD_CONFIG[activeField];
-  const oldValue = client[activeField] ?? '';
-  const label = meta?.label ?? activeField;
-  const isValid = newValue.trim().length > 0 && newValue.trim() !== oldValue;
-  const showError = touched && !newValue.trim();
-
-  const handleNext = () => {
-    if (!isValid) return;
-    setPendingUpdate({
-      field: activeField,
-      oldValue,
-      newValue: newValue.trim(),
-    });
-    // No client ID in the URL
-    navigate('/client/verify');
+  const handleFieldChange = (key: string, value: string) => {
+    setFormValues((prev) => ({ ...prev, [key]: value }));
   };
 
-  const isMultiline = activeField === 'address';
+  const handleNext = () => {
+    if (!hasChanges) return;
+    const newValue = { ...formValues } as unknown as SectionValue;
+    setPendingUpdate({
+      section: activeSection,
+      index: activeIndex,
+      oldValue,
+      newValue,
+    });
+    navigate('/client/verify');
+  };
 
   return (
     <div className="page-container">
@@ -62,58 +92,40 @@ export function DataEntryPage() {
       <div className="card card--mt">
         <h2 className="page-title">Edit {label}</h2>
         <p className="page-subtitle">
-          Enter the new value for <strong>{client.name}</strong>.
+          Update the values for <strong>{getDisplayName(client)}</strong>.
         </p>
 
-        <div className="form-group">
-          <label className="form-label" htmlFor="current-val">
-            Current Value
-          </label>
-          <div className="current-value">{oldValue || '(not set)'}</div>
-        </div>
+        {meta?.fields.map((field) => {
+          const currentVal =
+            (oldValue as unknown as Record<string, string>)[field.key] ?? '';
+          return (
+            <div className="form-group" key={field.key}>
+              <label className="form-label" htmlFor={`field-${field.key}`}>
+                {field.label}
+              </label>
+              <div className="current-value-hint">
+                Current: {currentVal || '(not set)'}
+              </div>
+              <input
+                id={`field-${field.key}`}
+                className="form-input"
+                type={field.inputType}
+                value={formValues[field.key] ?? ''}
+                onChange={(e) => handleFieldChange(field.key, e.target.value)}
+                onBlur={() => setTouched(true)}
+                placeholder={field.placeholder}
+              />
+            </div>
+          );
+        })}
 
-        <div className="form-group">
-          <label className="form-label" htmlFor="new-val">
-            New Value
-          </label>
-          {isMultiline ? (
-            <textarea
-              id="new-val"
-              className="form-input form-input--multiline"
-              rows={3}
-              value={newValue}
-              onChange={(e) => setNewValue(e.target.value)}
-              onBlur={() => setTouched(true)}
-              placeholder={meta?.placeholder}
-              autoFocus
-            />
-          ) : (
-            <input
-              id="new-val"
-              className="form-input"
-              type={meta?.inputType ?? 'text'}
-              value={newValue}
-              onChange={(e) => setNewValue(e.target.value)}
-              onBlur={() => setTouched(true)}
-              placeholder={meta?.placeholder}
-              autoFocus
-            />
-          )}
+        {touched && !hasChanges && (
           <div className="form-validation">
-            {showError && (
-              <span className="form-error form-error--block">
-                Please enter a value.
-              </span>
-            )}
-            {touched &&
-              newValue.trim() === oldValue &&
-              newValue.trim().length > 0 && (
-                <span className="form-error form-error--block">
-                  New value is the same as the current value.
-                </span>
-              )}
+            <span className="form-error form-error--block">
+              No changes detected. Modify at least one field.
+            </span>
           </div>
-        </div>
+        )}
 
         <hr className="divider" />
 
@@ -133,7 +145,7 @@ export function DataEntryPage() {
           <button
             className="btn btn-primary"
             onClick={handleNext}
-            disabled={!isValid}
+            disabled={!hasChanges}
           >
             Review Changes →
           </button>

@@ -11,10 +11,23 @@ import { ConfirmationPage } from '../pages/wizard/ConfirmationPage';
  * Single source of truth — avoids duplicating route paths and page imports.
  */
 export function wizardRoutes() {
-    return [
-        <Route key="detail" path="/client" element={<ClientDetailPage />} />,
-        <Route key="edit" path="/client/edit/:field" element={<DataEntryPage />} />,
-        <Route key="verify" path="/client/verify" element={<VerifyPage />} />,
-        <Route key="confirm" path="/client/confirmation" element={<ConfirmationPage />} />,
-    ];
+  return [
+    <Route key="detail" path="/client" element={<ClientDetailPage />} />,
+    <Route
+      key="edit"
+      path="/client/edit/:section"
+      element={<DataEntryPage />}
+    />,
+    <Route
+      key="edit-index"
+      path="/client/edit/:section/:index"
+      element={<DataEntryPage />}
+    />,
+    <Route key="verify" path="/client/verify" element={<VerifyPage />} />,
+    <Route
+      key="confirm"
+      path="/client/confirmation"
+      element={<ConfirmationPage />}
+    />,
+  ];
 }

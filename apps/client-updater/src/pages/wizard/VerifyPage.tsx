@@ -1,6 +1,10 @@
 import { useNavigate, Navigate } from 'react-router-dom';
 import { useClientContext } from '../../context/ClientContext';
-import { FIELD_LABELS } from '../../types/client.types';
+import {
+  SECTION_LABELS,
+  SECTION_CONFIG,
+  applySectionUpdate,
+} from '../../types/client.types';
 import { StepIndicator } from '../../components/StepIndicator';
 import { Spinner } from '../../components/Spinner';
 import { clientService } from '../../services/clientService';
@@ -24,21 +28,22 @@ export function VerifyPage() {
     return <Navigate to="/" replace />;
   }
 
-  const { field, oldValue, newValue } = pendingUpdate;
-  const label = FIELD_LABELS[field] ?? field;
+  const { section, index, oldValue, newValue } = pendingUpdate;
+  const label = SECTION_LABELS[section] ?? section;
+  const fields = SECTION_CONFIG[section]?.fields ?? [];
 
   const handleConfirm = async () => {
     setLoading(true);
     setError(null);
     try {
-      const result = await clientService.updateClientField(
-        client.id,
-        field,
+      const result = await clientService.updateClientSection(
+        client.clientId,
+        section,
         newValue,
+        index,
       );
       if (result.success) {
-        // Optimistically update context — client.id never goes into URL
-        setClient({ ...client, [field]: newValue });
+        setClient(applySectionUpdate(client, section, newValue, index));
         navigate('/client/confirmation');
       } else {
         setError('Update failed. Please try again.');
@@ -58,23 +63,39 @@ export function VerifyPage() {
         {isLoading && <Spinner variant="overlay" message="Saving changes…" />}
         <h2 className="page-title">Confirm Your Changes</h2>
         <p className="page-subtitle">
-          Please review the change before submitting.
+          Please review the changes to <strong>{label}</strong> before
+          submitting.
         </p>
 
-        {/* Diff summary */}
         <div className="diff-summary">
           <div className="diff-summary__label">{label}</div>
 
-          <div className="diff-grid">
-            <div>
-              <div className="diff-column__label">Current</div>
-              <div className="diff-old">{oldValue || '(not set)'}</div>
-            </div>
-            <div>
-              <div className="diff-column__label">New</div>
-              <div className="diff-new">{newValue}</div>
-            </div>
-          </div>
+          {fields.map((f) => {
+            const oldVal =
+              (oldValue as unknown as Record<string, string>)[f.key] ?? '';
+            const newVal =
+              (newValue as unknown as Record<string, string>)[f.key] ?? '';
+            const changed = oldVal !== newVal;
+            return (
+              <div
+                key={f.key}
+                className="diff-grid"
+                style={{ opacity: changed ? 1 : 0.5 }}
+              >
+                <div className="diff-field-label">{f.label}</div>
+                <div>
+                  <div className="diff-column__label">Current</div>
+                  <div className="diff-old">{oldVal || '(not set)'}</div>
+                </div>
+                <div>
+                  <div className="diff-column__label">New</div>
+                  <div className={changed ? 'diff-new' : 'diff-old'}>
+                    {newVal || '(not set)'}
+                  </div>
+                </div>
+              </div>
+            );
+          })}
         </div>
 
         {error && <div className="alert alert-error">{error}</div>}

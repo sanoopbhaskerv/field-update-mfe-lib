@@ -37,7 +37,8 @@ const ConfirmationPage = lazy(() =>
  *   /select-advisor      → SelectAdvisorPage (support_staff only — pick advisor to act on behalf of)
  *   /update/:contextId   → DeeplinkPage (contextId resolves to advisorId and/or clientId)
  *   /client              → ClientDetailPage + field picker
- *   /client/edit/:field  → Step 1: Data Entry
+ *   /client/edit/:section        → Step 1: Data Entry (name section)
+ *   /client/edit/:section/:index → Step 1: Data Entry (array item, e.g. email/0)
  *   /client/verify       → Step 2: Verify
  *   /client/confirmation → Step 3: Confirmation
  */
@@ -55,7 +56,11 @@ export function AppRouter() {
         <Route path="/select-advisor" element={<SelectAdvisorPage />} />
         <Route path="/update/:contextId" element={<DeeplinkPage />} />
         <Route path="/client" element={<ClientDetailPage />} />
-        <Route path="/client/edit/:field" element={<DataEntryPage />} />
+        <Route path="/client/edit/:section" element={<DataEntryPage />} />
+        <Route
+          path="/client/edit/:section/:index"
+          element={<DataEntryPage />}
+        />
         <Route path="/client/verify" element={<VerifyPage />} />
         <Route path="/client/confirmation" element={<ConfirmationPage />} />
         <Route path="*" element={<Navigate to="/" replace />} />

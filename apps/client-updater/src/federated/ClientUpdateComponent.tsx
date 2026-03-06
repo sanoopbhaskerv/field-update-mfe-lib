@@ -11,41 +11,60 @@ import { useClientContext } from '../context/ClientContext';
 import { wizardRoutes } from '../routes/WizardRoutes';
 import { FederatedWrapper, FederatedWrapperProps } from './FederatedWrapper';
 import type { OnCompleteCallback } from './FederatedWrapper';
-import type { ClientField } from '../types/client.types';
+import type { ClientSection } from '../types/client.types';
 
-export interface ClientUpdateProps extends Omit<FederatedWrapperProps, 'children'> {
-    fieldToEdit: ClientField;
-    onComplete?: OnCompleteCallback;
+export interface ClientUpdateProps
+  extends Omit<FederatedWrapperProps, 'children'> {
+  sectionToEdit: ClientSection;
+  indexToEdit?: number;
+  onComplete?: OnCompleteCallback;
 }
 
-function ClientUpdateInner({ fieldToEdit }: { fieldToEdit: ClientField }) {
-    const navigate = useNavigate();
-    const { client, selectField } = useClientContext();
-    const hasClient = !!client;
-    const initialNav = useRef(false);
+function ClientUpdateInner({
+  sectionToEdit,
+  indexToEdit,
+}: {
+  sectionToEdit: ClientSection;
+  indexToEdit?: number;
+}) {
+  const navigate = useNavigate();
+  const { client, selectSection } = useClientContext();
+  const hasClient = !!client;
+  const initialNav = useRef(false);
 
-    useEffect(() => {
-        if (hasClient && fieldToEdit && !initialNav.current) {
-            initialNav.current = true;
-            selectField(fieldToEdit);
-            navigate(`/client/edit/${fieldToEdit}`, { replace: true });
-        }
-    }, [hasClient, fieldToEdit, selectField, navigate]);
+  useEffect(() => {
+    if (hasClient && sectionToEdit && !initialNav.current) {
+      initialNav.current = true;
+      selectSection(sectionToEdit, indexToEdit);
+      const path =
+        indexToEdit !== undefined
+          ? `/client/edit/${sectionToEdit}/${indexToEdit}`
+          : `/client/edit/${sectionToEdit}`;
+      navigate(path, { replace: true });
+    }
+  }, [hasClient, sectionToEdit, indexToEdit, selectSection, navigate]);
 
-    return (
-        <Routes>
-            <Route path="/" element={null} />
-            {wizardRoutes()}
-        </Routes>
-    );
+  return (
+    <Routes>
+      <Route path="/" element={null} />
+      {wizardRoutes()}
+    </Routes>
+  );
 }
 
-export function ClientUpdateComponent({ fieldToEdit, ...rest }: ClientUpdateProps) {
-    return (
-        <FederatedWrapper {...rest}>
-            <ClientUpdateInner fieldToEdit={fieldToEdit} />
-        </FederatedWrapper>
-    );
+export function ClientUpdateComponent({
+  sectionToEdit,
+  indexToEdit,
+  ...rest
+}: ClientUpdateProps) {
+  return (
+    <FederatedWrapper {...rest}>
+      <ClientUpdateInner
+        sectionToEdit={sectionToEdit}
+        indexToEdit={indexToEdit}
+      />
+    </FederatedWrapper>
+  );
 }
 
 export default ClientUpdateComponent;

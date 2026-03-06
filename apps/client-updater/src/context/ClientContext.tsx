@@ -10,48 +10,50 @@
  */
 import React, { createContext, useContext, useState, useCallback } from 'react';
 import type {
-    ClientProfile,
-    ClientField,
-    PendingUpdate,
-    UserRole,
-    AdvisorProfile,
+  ClientProfile,
+  ClientSection,
+  PendingUpdate,
+  UserRole,
+  AdvisorProfile,
 } from '../types/client.types';
 
 // ─── State ────────────────────────────────────────────────────────────────────
 interface ClientContextState {
-    /** Resolved from getSignOn() on app mount */
-    userRole: UserRole | null;
-    /** The logged-in user's own ID (advisorId if advisor, staffId if support_staff) */
-    signedOnUserId: string | null;
-    /** Display name of the signed-on user */
-    signedOnName: string | null;
-    /** The advisor the support staff is currently acting on behalf of (null if none) */
-    activeAdvisor: AdvisorProfile | null;
-    /** The effective advisorId for scoped queries:
-     *  - advisor role → signedOnUserId
-     *  - support_staff + activeAdvisor → activeAdvisor.id
-     *  - support_staff, no advisor → null (name search not permitted) */
-    effectiveAdvisorId: string | null;
-    /** The loaded client profile */
-    client: ClientProfile | null;
-    /** Field currently being edited in the wizard */
-    selectedField: ClientField | null;
-    /** Staged wizard update (old + new value) */
-    pendingUpdate: PendingUpdate | null;
-    isLoading: boolean;
-    error: string | null;
+  /** Resolved from getSignOn() on app mount */
+  userRole: UserRole | null;
+  /** The logged-in user's own ID (advisorId if advisor, staffId if support_staff) */
+  signedOnUserId: string | null;
+  /** Display name of the signed-on user */
+  signedOnName: string | null;
+  /** The advisor the support staff is currently acting on behalf of (null if none) */
+  activeAdvisor: AdvisorProfile | null;
+  /** The effective advisorId for scoped queries:
+   *  - advisor role → signedOnUserId
+   *  - support_staff + activeAdvisor → activeAdvisor.id
+   *  - support_staff, no advisor → null (name search not permitted) */
+  effectiveAdvisorId: string | null;
+  /** The loaded client profile */
+  client: ClientProfile | null;
+  /** Section currently being edited in the wizard */
+  selectedSection: ClientSection | null;
+  /** Index within an array section (emails, telephone, postalAddress) */
+  selectedIndex: number | undefined;
+  /** Staged wizard update (old + new value) */
+  pendingUpdate: PendingUpdate | null;
+  isLoading: boolean;
+  error: string | null;
 }
 
 // ─── Actions ──────────────────────────────────────────────────────────────────
 interface ClientContextActions {
-    setRole: (role: UserRole, userId: string, name: string) => void;
-    setAdvisor: (advisor: AdvisorProfile | null) => void;
-    setClient: (client: ClientProfile | null) => void;
-    selectField: (field: ClientField) => void;
-    setPendingUpdate: (update: PendingUpdate | null) => void;
-    setLoading: (loading: boolean) => void;
-    setError: (error: string | null) => void;
-    reset: () => void;
+  setRole: (role: UserRole, userId: string, name: string) => void;
+  setAdvisor: (advisor: AdvisorProfile | null) => void;
+  setClient: (client: ClientProfile | null) => void;
+  selectSection: (section: ClientSection, index?: number) => void;
+  setPendingUpdate: (update: PendingUpdate | null) => void;
+  setLoading: (loading: boolean) => void;
+  setError: (error: string | null) => void;
+  reset: () => void;
 }
 
 type ClientContextValue = ClientContextState & ClientContextActions;
@@ -59,121 +61,176 @@ type ClientContextValue = ClientContextState & ClientContextActions;
 const ClientContext = createContext<ClientContextValue | null>(null);
 
 const initialState: ClientContextState = {
-    userRole: null,
-    signedOnUserId: null,
-    signedOnName: null,
-    activeAdvisor: null,
-    effectiveAdvisorId: null,
-    client: null,
-    selectedField: null,
-    pendingUpdate: null,
-    isLoading: false,
-    error: null,
+  userRole: null,
+  signedOnUserId: null,
+  signedOnName: null,
+  activeAdvisor: null,
+  effectiveAdvisorId: null,
+  client: null,
+  selectedSection: null,
+  selectedIndex: undefined,
+  pendingUpdate: null,
+  isLoading: false,
+  error: null,
 };
 
 // ─── Provider ─────────────────────────────────────────────────────────────────
 
 /** Wraps the component tree with shared client-updater state. */
 export function ClientProvider({ children }: { children: React.ReactNode }) {
-    const [state, setState] = useState<ClientContextState>(initialState);
+  const [state, setState] = useState<ClientContextState>(initialState);
 
-    const setRole = useCallback((role: UserRole, userId: string, name: string) => {
-        setState((prev) => ({
-            ...prev,
-            userRole: role,
-            signedOnUserId: userId,
-            signedOnName: name,
-            // If role is advisor, they are their own effective advisor
-            effectiveAdvisorId: role === 'advisor' ? userId : null,
-        }));
-    }, []);
+  const setRole = useCallback(
+    (role: UserRole, userId: string, name: string) => {
+      setState((prev) => ({
+        ...prev,
+        userRole: role,
+        signedOnUserId: userId,
+        signedOnName: name,
+        // If role is advisor, they are their own effective advisor
+        effectiveAdvisorId: role === 'advisor' ? userId : null,
+      }));
+    },
+    [],
+  );
 
-    const setAdvisor = useCallback((advisor: AdvisorProfile | null) => {
-        setState((prev) => ({
-            ...prev,
-            activeAdvisor: advisor,
-            effectiveAdvisorId:
-                advisor !== null
-                    ? advisor.id
-                    : prev.userRole === 'advisor'
-                        ? prev.signedOnUserId
-                        : null,
-            // Reset client search state when advisor changes
-            client: null,
-            selectedField: null,
-            pendingUpdate: null,
-            error: null,
-        }));
-    }, []);
+  const setAdvisor = useCallback((advisor: AdvisorProfile | null) => {
+    setState((prev) => ({
+      ...prev,
+      activeAdvisor: advisor,
+      effectiveAdvisorId:
+        advisor !== null
+          ? advisor.id
+          : prev.userRole === 'advisor'
+            ? prev.signedOnUserId
+            : null,
+      // Reset client search state when advisor changes
+      client: null,
+      selectedSection: null,
+      selectedIndex: undefined,
+      pendingUpdate: null,
+      error: null,
+    }));
+  }, []);
 
-    const setClient = useCallback((client: ClientProfile | null) => {
-        setState((prev) => ({ ...prev, client, error: null }));
-    }, []);
+  const setClient = useCallback((client: ClientProfile | null) => {
+    setState((prev) => ({ ...prev, client, error: null }));
+  }, []);
 
-    const selectField = useCallback((field: ClientField) => {
-        setState((prev) => ({ ...prev, selectedField: field, pendingUpdate: null }));
-    }, []);
+  const selectSection = useCallback(
+    (section: ClientSection, index?: number) => {
+      setState((prev) => ({
+        ...prev,
+        selectedSection: section,
+        selectedIndex: index,
+        pendingUpdate: null,
+      }));
+    },
+    [],
+  );
 
-    const setPendingUpdate = useCallback((pendingUpdate: PendingUpdate | null) => {
-        setState((prev) => ({ ...prev, pendingUpdate }));
-    }, []);
+  const setPendingUpdate = useCallback(
+    (pendingUpdate: PendingUpdate | null) => {
+      setState((prev) => ({ ...prev, pendingUpdate }));
+    },
+    [],
+  );
 
-    const setLoading = useCallback((isLoading: boolean) => {
-        setState((prev) => ({ ...prev, isLoading }));
-    }, []);
+  const setLoading = useCallback((isLoading: boolean) => {
+    setState((prev) => ({ ...prev, isLoading }));
+  }, []);
 
-    const setError = useCallback((error: string | null) => {
-        setState((prev) => ({ ...prev, error, isLoading: false }));
-    }, []);
+  const setError = useCallback((error: string | null) => {
+    setState((prev) => ({ ...prev, error, isLoading: false }));
+  }, []);
 
-    const reset = useCallback(() => {
-        setState((prev) => ({
-            ...initialState,
-            // Preserve identity — don't log the user out on reset
-            userRole: prev.userRole,
-            signedOnUserId: prev.signedOnUserId,
-            signedOnName: prev.signedOnName,
-            activeAdvisor: prev.activeAdvisor,
-            effectiveAdvisorId: prev.effectiveAdvisorId,
-        }));
-    }, []);
+  const reset = useCallback(() => {
+    setState((prev) => ({
+      ...initialState,
+      // Preserve identity — don't log the user out on reset
+      userRole: prev.userRole,
+      signedOnUserId: prev.signedOnUserId,
+      signedOnName: prev.signedOnName,
+      activeAdvisor: prev.activeAdvisor,
+      effectiveAdvisorId: prev.effectiveAdvisorId,
+    }));
+  }, []);
 
-    return (
-        <ClientContext.Provider
-            value={{ ...state, setRole, setAdvisor, setClient, selectField, setPendingUpdate, setLoading, setError, reset }}
-        >
-            {children}
-        </ClientContext.Provider>
-    );
+  return (
+    <ClientContext.Provider
+      value={{
+        ...state,
+        setRole,
+        setAdvisor,
+        setClient,
+        selectSection,
+        setPendingUpdate,
+        setLoading,
+        setError,
+        reset,
+      }}
+    >
+      {children}
+    </ClientContext.Provider>
+  );
 }
 
 // ─── Hook ─────────────────────────────────────────────────────────────────────
-/** Full-access hook — returns every state field and action. */export function useClientContext(): ClientContextValue {
-    const ctx = useContext(ClientContext);
-    if (!ctx) throw new Error('useClientContext must be used within a <ClientProvider>');
-    return ctx;
+/** Full-access hook — returns every state field and action. */ export function useClientContext(): ClientContextValue {
+  const ctx = useContext(ClientContext);
+  if (!ctx)
+    throw new Error('useClientContext must be used within a <ClientProvider>');
+  return ctx;
 }
 
 // ─── Focused hooks (Interface Segregation) ───────────────────────────────────
-/** Focused hook for authentication & advisor identity state. */export function useAuth() {
-    const { userRole, signedOnUserId, signedOnName, effectiveAdvisorId, activeAdvisor, setRole, setAdvisor } = useClientContext();
-    return { userRole, signedOnUserId, signedOnName, effectiveAdvisorId, activeAdvisor, setRole, setAdvisor };
+/** Focused hook for authentication & advisor identity state. */ export function useAuth() {
+  const {
+    userRole,
+    signedOnUserId,
+    signedOnName,
+    effectiveAdvisorId,
+    activeAdvisor,
+    setRole,
+    setAdvisor,
+  } = useClientContext();
+  return {
+    userRole,
+    signedOnUserId,
+    signedOnName,
+    effectiveAdvisorId,
+    activeAdvisor,
+    setRole,
+    setAdvisor,
+  };
 }
 
 /** Focused hook for the loaded client profile and reset action. */
 export function useClientState() {
-    const { client, setClient, reset } = useClientContext();
-    return { client, setClient, reset };
+  const { client, setClient, reset } = useClientContext();
+  return { client, setClient, reset };
 }
 
-/** Focused hook for wizard field selection and pending update staging. */
+/** Focused hook for wizard section selection and pending update staging. */
 export function useWizardState() {
-    const { selectedField, pendingUpdate, selectField, setPendingUpdate } = useClientContext();
-    return { selectedField, pendingUpdate, selectField, setPendingUpdate };
+  const {
+    selectedSection,
+    selectedIndex,
+    pendingUpdate,
+    selectSection,
+    setPendingUpdate,
+  } = useClientContext();
+  return {
+    selectedSection,
+    selectedIndex,
+    pendingUpdate,
+    selectSection,
+    setPendingUpdate,
+  };
 }
 
 /** Focused hook for loading and error UI flags. */
 export function useUiState() {
-    const { isLoading, error, setLoading, setError } = useClientContext();
-    return { isLoading, error, setLoading, setError };
+  const { isLoading, error, setLoading, setError } = useClientContext();
+  return { isLoading, error, setLoading, setError };
 }
